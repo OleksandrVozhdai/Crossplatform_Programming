@@ -11,5 +11,6 @@
 		public int Recovered { get; set; }
 		public int TodayRecovered { get; set; }
 		public int population { get; set; }
+		public DateTime UpdatedAt { get; internal set; }
 	}
 }

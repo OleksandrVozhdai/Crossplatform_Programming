@@ -1,11 +1,12 @@
 using disease_outbreaks_detector.Models;
+using disease_outbreaks_detector.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace disease_outbreaks_detector
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +16,13 @@ namespace disease_outbreaks_detector
 		        options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 
 			builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            var app = builder.Build();
+			builder.Services.AddHttpClient();
+			builder.Services.AddScoped<ExternalApi>();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -35,7 +38,14 @@ namespace disease_outbreaks_detector
 
             app.MapControllers();
 
-            app.Run();
+			using (var scope = app.Services.CreateScope())
+			{
+				var services = scope.ServiceProvider;
+				var externalApi = services.GetRequiredService<ExternalApi>();
+				await externalApi.FetchAndStoreAsync("usa");
+			}
+
+			app.Run();
         }
     }
 }

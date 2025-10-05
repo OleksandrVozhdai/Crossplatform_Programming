@@ -46,6 +46,7 @@ namespace disease_outbreaks_detector
 			}
 
 			app.Run();
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using disease_outbreaks_detector.Models;
 
@@ -10,9 +11,11 @@ using disease_outbreaks_detector.Models;
 namespace disease_outbreaks_detector.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251011144540_InitialCreate2")]
+    partial class InitialCreate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -23,9 +26,6 @@ namespace disease_outbreaks_detector.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Active")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Cases")
                         .HasColumnType("INTEGER");
 
@@ -33,17 +33,8 @@ namespace disease_outbreaks_detector.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Critical")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Deaths")
                         .HasColumnType("INTEGER");
-
-                    b.Property<double?>("Latitude")
-                        .HasColumnType("REAL");
-
-                    b.Property<double?>("Longitude")
-                        .HasColumnType("REAL");
 
                     b.Property<int>("Recovered")
                         .HasColumnType("INTEGER");

@@ -137,7 +137,7 @@ public class CaseRecord
     }
 }
 
-## UnixTimestampConverter
+### UnixTimestampConverter
 
 A custom JSON converter is used to handle the updated timestamp in the API response. It converts the timestamp from Unix format (milliseconds) to `DateTime`:
 
@@ -155,7 +155,7 @@ public class UnixTimestampConverter : JsonConverter<DateTime>
     }
 }
 
-## AppDbContext
+### AppDbContext
 
 `AppDbContext` is used as the EF Core DbContext with a `DbSet<CaseRecord>` to interact with the `CaseRecords` table in SQLite.
 
@@ -174,7 +174,7 @@ public class AppDbContext : DbContext
     }
 }
 
-## Tests
+#№# Tests
 
 Unit tests use xUnit and Moq for mocking. Coverage: 80% for services and controllers.
 

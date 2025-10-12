@@ -75,7 +75,8 @@ namespace disease_outbreaks_detector.Tests
 
             var httpClient = new HttpClient(mockHandler.Object);
             var mockFactory = new Mock<IHttpClientFactory>();
-            mockFactory.Setup(f => f.CreateClient("default")).Returns(httpClient);
+            mockFactory.Setup(f => ((IHttpClientFactory)f).CreateClient())  // Cast to avoid extension method issue
+                .Returns(httpClient);
 
             var service = new ExternalApi(context, mockFactory.Object);
 
@@ -86,7 +87,6 @@ namespace disease_outbreaks_detector.Tests
             Assert.NotNull(result);
             Assert.Equal("USA", result.Country);
             Assert.Equal(111820082, result.Cases);
-            // Latitude parsing optional, skip for now to pass test
         }
 
         [Fact]
@@ -117,7 +117,8 @@ namespace disease_outbreaks_detector.Tests
 
             var httpClient = new HttpClient(mockHandler.Object);
             var mockFactory = new Mock<IHttpClientFactory>();
-            mockFactory.Setup(f => f.CreateClient("default")).Returns(httpClient);
+            mockFactory.Setup(f => ((IHttpClientFactory)f).CreateClient())  // Cast to avoid extension method
+                .Returns(httpClient);
 
             var service = new ExternalApi(context, mockFactory.Object);
 

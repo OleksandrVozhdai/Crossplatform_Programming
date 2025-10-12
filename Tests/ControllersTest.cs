@@ -75,7 +75,7 @@ namespace disease_outbreaks_detector.Tests
 
             var httpClient = new HttpClient(mockHandler.Object);
             var mockFactory = new Mock<IHttpClientFactory>();
-            mockFactory.Setup(f => ((IHttpClientFactory)f).CreateClient())  // Cast to avoid extension method issue
+            mockFactory.Setup(f => f.CreateClient("default"))  // Setup for named client
                 .Returns(httpClient);
 
             var service = new ExternalApi(context, mockFactory.Object);
@@ -117,7 +117,7 @@ namespace disease_outbreaks_detector.Tests
 
             var httpClient = new HttpClient(mockHandler.Object);
             var mockFactory = new Mock<IHttpClientFactory>();
-            mockFactory.Setup(f => ((IHttpClientFactory)f).CreateClient())  // Cast to avoid extension method
+            mockFactory.Setup(f => f.CreateClient("default"))  // Setup for named client
                 .Returns(httpClient);
 
             var service = new ExternalApi(context, mockFactory.Object);

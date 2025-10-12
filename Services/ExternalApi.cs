@@ -16,7 +16,7 @@ namespace disease_outbreaks_detector.Services
         public ExternalApi(AppDbContext context, IHttpClientFactory httpClientFactory)
         {
             _context = context;
-            _httpClient = httpClientFactory.CreateClient();
+            _httpClient = httpClientFactory.CreateClient("default");  // Named client, mockable interface method
         }
 
         public async Task<CaseRecord?> FetchAndStoreAsync(string country)

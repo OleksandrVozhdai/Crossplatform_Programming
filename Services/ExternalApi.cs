@@ -16,7 +16,7 @@ namespace disease_outbreaks_detector.Services
         public ExternalApi(AppDbContext context, IHttpClientFactory httpClientFactory)
         {
             _context = context;
-            _httpClient = httpClientFactory.CreateClient("default");  // Named overload, mockable
+            _httpClient = httpClientFactory.CreateClient();
         }
 
         public async Task<CaseRecord?> FetchAndStoreAsync(string country)
@@ -25,7 +25,10 @@ namespace disease_outbreaks_detector.Services
             var response = await _httpClient.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"API call failed: {response.StatusCode}");
                 return null;
+            }
 
             var json = await response.Content.ReadAsStringAsync();
 
@@ -35,9 +38,20 @@ namespace disease_outbreaks_detector.Services
             });
 
             if (data == null)
+            {
+                Console.WriteLine($"Deserialization failed for {country}: Check JSON format.");  // Debug
                 return null;
+            }
 
-            bool exists = await _context.CaseRecords.AnyAsync(x => x.Country == data.Country);
+            // Parse lat/long from countryInfo
+            using JsonDocument doc = JsonDocument.Parse(json);
+            if (doc.RootElement.TryGetProperty("countryInfo", out var countryInfo))
+            {
+                data.Latitude = countryInfo.TryGetProperty("lat", out var latProp) ? latProp.GetDouble() : null;
+                data.Longitude = countryInfo.TryGetProperty("long", out var longProp) ? longProp.GetDouble() : null;
+            }
+
+            bool exists = await _context.CaseRecords.AnyAsync(x => x.Country.ToLower() == data.Country.ToLower());
             if (!exists)
             {
                 _context.CaseRecords.Add(data);
@@ -45,16 +59,22 @@ namespace disease_outbreaks_detector.Services
             }
             else
             {
-                // Update existing (simple, add more fields if needed)
-                var existing = await _context.CaseRecords.FirstOrDefaultAsync(x => x.Country == data.Country);
+                var existing = await _context.CaseRecords.FirstOrDefaultAsync(x => x.Country.ToLower() == data.Country.ToLower());
                 if (existing != null)
                 {
                     existing.Cases = data.Cases;
+                    existing.TodayCases = data.TodayCases;
                     existing.Deaths = data.Deaths;
-                    // Add other fields
+                    existing.TodayDeaths = data.TodayDeaths;
+                    existing.Recovered = data.Recovered;
+                    existing.TodayRecovered = data.TodayRecovered;
+                    existing.population = data.population;
                     existing.UpdatedAt = data.UpdatedAt;
+                    existing.Active = data.Active;
+                    existing.Critical = data.Critical;
+                    existing.Latitude = data.Latitude;
+                    existing.Longitude = data.Longitude;
                     await _context.SaveChangesAsync();
-                    return data;  // Добавь в конец
                 }
             }
 

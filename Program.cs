@@ -21,8 +21,6 @@ builder.Services.AddScoped<ExternalApi>(provider =>
 
 var app = builder.Build();
 
-Console.WriteLine("App built successfully.");  // Log 1: Достигли build
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -32,20 +30,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseAuthorization();
 app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Cases}/{action=Index}/{id?}");
 
-Console.WriteLine("Pipeline configured.");  // Log 2: Достигли pipeline
-
-// Ensure DB exists
+// Ensure DB exists and create table
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
-    Console.WriteLine("DB ensured created.");  // Log 3: БД готова
+    context.Database.EnsureCreated();  // Создаст таблицу CaseRecords по модели
+    Console.WriteLine("DB table created.");
 }
 
 // Seed data (USA on startup)
@@ -55,15 +52,15 @@ using (var scope = app.Services.CreateScope())
     var externalApi = services.GetRequiredService<ExternalApi>();
     try
     {
-        Console.WriteLine("Seeding USA data...");  // Log 4
+        Console.WriteLine("Seeding USA data...");
         await externalApi.FetchAndStoreAsync("usa");
-        Console.WriteLine("Seed completed successfully.");  // Log 5
+        Console.WriteLine("Seed completed successfully.");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Seed failed: {ex.Message}");  // Log 6: Поймаем exception
+        Console.WriteLine($"Seed failed: {ex.Message}");
     }
 }
 
-Console.WriteLine("Server starting...");  // Log 7: Перед Run
-app.Run();  // Это держит сервер
+Console.WriteLine("Server starting on http://localhost:5052");
+app.Run();

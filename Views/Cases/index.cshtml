@@ -1,148 +1,82 @@
 ﻿@using disease_outbreaks_detector.Models
 
 @{
-    ViewData["Title"] = "Disease Outbreaks Monitor";
     var record = ViewBag.Record as CaseRecord;
     var country = ViewBag.Country as string;
     var error = ViewBag.Error as string;
 }
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disease Outbreaks Monitor</title>
 
-<div class="container">
-    <h1>COVID-19 Data for @country</h1>
+    <link rel="stylesheet" href="~/Styles/HomePage.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk&display=swap" rel="stylesheet">
+</head>
 
-    @if (!string.IsNullOrEmpty(error))
-    {
-        <div class="alert alert-warning">@error</div>
-    }
-    else if (record != null)
-    {
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Cases</h3>
-                <p>@(record.Cases > 0 ? record.Cases.ToString("N0") : "N/A")</p>
-            </div>
-            <div class="stat-card">
-                <h3>Today Cases</h3>
-                <p>@(record.TodayCases > 0 ? record.TodayCases.ToString("N0") : "N/A")</p>
-            </div>
-            <div class="stat-card">
-                <h3>Deaths</h3>
-                <p>@(record.Deaths > 0 ? record.Deaths.ToString("N0") : "N/A")</p>
-            </div>
-            <div class="stat-card">
-                <h3>Today Deaths</h3>
-                <p>@(record.TodayDeaths > 0 ? record.TodayDeaths.ToString("N0") : "N/A")</p>
-            </div>
-            <div class="stat-card">
-                <h3>Recovered</h3>
-                <p>@(record.Recovered > 0 ? record.Recovered.ToString("N0") : "N/A")</p>
-            </div>
-            <div class="stat-card">
-                <h3>Today Recovered</h3>
-                <p>@(record.TodayRecovered > 0 ? record.TodayRecovered.ToString("N0") : "N/A")</p>
-            </div>
-            <div class="stat-card">
-                <h3>Population</h3>
-                <p>@(record.population > 0 ? record.population.ToString("N0") : "N/A")</p>
-            </div>
-            <div class="stat-card">
-                <h3>Updated</h3>
-                <p>@record.UpdatedAt.ToShortDateString()</p>
-            </div>
+<body>
+    <header>   
+        <div class="nav-upper-panel">
+            <a>Disease Outbreaks Monitor</a>
         </div>
-    }
-    else
-    {
-        <div class="alert alert-info">Loading data... If error, check console.</div>
-    }
+        <span class="bottom-header-line" /> 
+    </header>
 
-    <form asp-action="Index" method="get">
-        <label for="country">Search by country:</label>
-        <input type="text" id="country" name="country" value="@country" placeholder="e.g., Ukraine" />
-        <button type="submit">Fetch Data</button>
-    </form>
-</div>
+    <div class="container">
+        <h1>COVID-19 Data for @country</h1>
 
-<style>
-    .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-        font-family: Arial, sans-serif;
-    }
-
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin: 20px 0;
-    }
-
-    .stat-card {
-        border: 1px solid #ddd;
-        padding: 15px;
-        text-align: center;
-        background: #f8f9fa;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-        .stat-card h3 {
-            margin: 0 0 10px;
-            color: #333;
-            font-size: 1.1em;
+        @if (!string.IsNullOrEmpty(error))
+        {
+            <div class="alert alert-warning">@error</div>
+        }
+        else if (record != null)
+        {
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Cases</h3>
+                    <p>@(record.Cases > 0 ? record.Cases.ToString("N0") : "N/A")</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Today Cases</h3>
+                    <p>@(record.TodayCases > 0 ? record.TodayCases.ToString("N0") : "N/A")</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Deaths</h3>
+                    <p>@(record.Deaths > 0 ? record.Deaths.ToString("N0") : "N/A")</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Today Deaths</h3>
+                    <p>@(record.TodayDeaths > 0 ? record.TodayDeaths.ToString("N0") : "N/A")</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Recovered</h3>
+                    <p>@(record.Recovered > 0 ? record.Recovered.ToString("N0") : "N/A")</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Today Recovered</h3>
+                    <p>@(record.TodayRecovered > 0 ? record.TodayRecovered.ToString("N0") : "N/A")</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Population</h3>
+                    <p>@(record.population > 0 ? record.population.ToString("N0") : "N/A")</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Updated</h3>
+                    <p>@record.UpdatedAt.ToShortDateString()</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">Loading data... If error, check console.</div>
         }
 
-        .stat-card p {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #007bff;
-            margin: 0;
-        }
+        <form asp-action="Index" method="get">
+            <label for="country">Search by country:</label>
+            <input type="text" id="country" name="country" value="@country" placeholder="e.g., Ukraine" />
+            <button type="submit">Fetch Data</button>
+        </form>
+    </div>
 
-    .alert {
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        margin: 10px 0;
-    }
-
-    .alert-warning {
-        background: #fff3cd;
-        color: #856404;
-        border-color: #ffeaa7;
-    }
-
-    .alert-info {
-        background: #d1ecf1;
-        color: #0c5460;
-        border-color: #bee5eb;
-    }
-
-    form {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        margin-top: 20px;
-    }
-
-    input {
-        padding: 8px;
-        flex: 1;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    button {
-        padding: 8px 16px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-        button:hover {
-            background: #0056b3;
-        }
-</style>
+    <div class="worldmap-container"></div>
+</body>

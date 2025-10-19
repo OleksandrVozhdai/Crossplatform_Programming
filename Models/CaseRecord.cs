@@ -19,16 +19,14 @@ namespace disease_outbreaks_detector.Models
         public int Recovered { get; set; }
         public int TodayRecovered { get; set; }
         public int population { get; set; }
-        public int Active { get; set; } // Added from API
-        public int Critical { get; set; } // Added from API
-        public double? Latitude { get; set; } // Added from countryInfo
-        public double? Longitude { get; set; } // Added from countryInfo
+        public int Active { get; set; } 
+        public int Critical { get; set; } 
+        public double? Latitude { get; set; } 
+        public double? Longitude { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.Today.AddDays(-1);
 
-        [JsonConverter(typeof(UnixTimestampConverter))]
-        public DateTime UpdatedAt { get; set; }
-
-        // Validation method for tests
-        public bool IsValid()
+		// Validation method for tests
+		public bool IsValid()
         {
             var context = new System.ComponentModel.DataAnnotations.ValidationContext(this);
             var results = new System.Collections.Generic.List<System.ComponentModel.DataAnnotations.ValidationResult>();
@@ -36,22 +34,5 @@ namespace disease_outbreaks_detector.Models
         }
     }
 
-    // Custom JsonConverter for Unix timestamp (milliseconds) to DateTime
-    public class UnixTimestampConverter : JsonConverter<DateTime>
-    {
-        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            if (reader.TokenType == JsonTokenType.Number)
-            {
-                long timestamp = reader.GetInt64();
-                return DateTimeOffset.FromUnixTimeMilliseconds(timestamp).DateTime;
-            }
-            return DateTime.MinValue;
-        }
-
-        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
-        {
-            writer.WriteNumberValue(new DateTimeOffset(value).ToUnixTimeMilliseconds());
-        }
-    }
+   
 }

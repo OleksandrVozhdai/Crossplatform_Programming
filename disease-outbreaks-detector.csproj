@@ -35,6 +35,11 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="DTOs\" />
+    <Folder Include="wwwroot\public\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Styles\HomePage.css" />
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>disease_outbreaks_detector</RootNamespace>
+
+	 <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,6 +42,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\Styles\HomePage.css" />
+    <None Update="Views/Cases/Index.cshtml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

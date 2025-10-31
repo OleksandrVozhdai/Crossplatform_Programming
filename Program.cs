@@ -32,16 +32,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthorization();
-app.MapControllers();
+//app.MapControllers();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Cases}/{action=Index}/{id?}");
+    pattern: "{controller=HomePage}/{action=Index}");
 
 // Ensure DB exists and create table
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();  // Создаст таблицу CaseRecords по модели
+    context.Database.EnsureCreated();
     Console.WriteLine("DB table created.");
 }
 

@@ -1,19 +1,11 @@
-﻿@using disease_outbreaks_detector.Models
-
-@{
-    var record = ViewBag.Record as CaseRecord;
-    var country = ViewBag.Country as string;
-    var error = ViewBag.Error as string;
-}
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Disease Outbreaks Monitor</title>
-
+﻿<head>
+    <title>Choose page</title>
     <link rel="stylesheet" href="~/Styles/HomePage.css" />
     <link rel="stylesheet" href="~/Styles/Style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk&display=swap" rel="stylesheet">
 </head>
+
+
 
 <body>
     <div class="nav-upper-panel">
@@ -85,61 +77,28 @@
         <span class="bottom-header-line"> </span>
     </header>
 
-    <div class="container">
-        <h1>COVID-19 Data for @country</h1>
+    <div class="center-buttons">
+        <button onclick="window.location.href='/Cases/index'" class="white-button" style="margin-top:-100px">
+            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            Fetch Country Data
+        </button>
 
-        @if (!string.IsNullOrEmpty(error))
-        {
-            <div class="alert alert-warning">@error</div>
-        }
-        else if (record != null)
-        {
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Cases</h3>
-                    <p>@(record.Cases > 0 ? record.Cases.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Today Cases</h3>
-                    <p>@(record.TodayCases > 0 ? record.TodayCases.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Deaths</h3>
-                    <p>@(record.Deaths > 0 ? record.Deaths.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Today Deaths</h3>
-                    <p>@(record.TodayDeaths > 0 ? record.TodayDeaths.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Recovered</h3>
-                    <p>@(record.Recovered > 0 ? record.Recovered.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Today Recovered</h3>
-                    <p>@(record.TodayRecovered > 0 ? record.TodayRecovered.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Population</h3>
-                    <p>@(record.population > 0 ? record.population.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Updated</h3>
-                    <p>@record.UpdatedAt.ToShortDateString()</p>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="alert alert-info">Loading data... If error, check console.</div>
-        }
+        <button onclick="window.location.href='/Cases/CompareCountries'" class="white-button" style="margin-top:20px">
+            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+            </svg>
+            Compare Countries
+        </button>
 
-        <form asp-action="Index" method="get">
-            <label for="country">Search by country:</label>
-            <input type="text" id="country" name="country" value="@country" placeholder="e.g., Ukraine" />
-            <button type="submit">Fetch Data</button>
-        </form>
+        <img alt="" src="~/public/corona.png">
+
     </div>
 
-    <div class="worldmap-container"></div>
 </body>

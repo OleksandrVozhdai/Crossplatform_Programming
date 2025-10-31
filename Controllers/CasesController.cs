@@ -38,5 +38,34 @@ namespace disease_outbreaks_detector.Controllers
             }
             return View();
         }
-    }
+
+		public async Task<IActionResult> ChoosePage()
+		{
+			return View();
+		}
+
+
+		public async Task<IActionResult> CompareCountries(string country1 = "USA", string country2 = "Canada")
+		{
+			CaseRecord? record1 = null;
+			CaseRecord? record2 = null;
+
+			try
+			{
+				record1 = await _externalApi.FetchAndStoreAsync(country1);
+				record2 = await _externalApi.FetchAndStoreAsync(country2);
+			}
+			catch (Exception ex)
+			{
+				ViewBag.Error = $"Error comparing countries: {ex.Message}";
+			}
+
+			ViewBag.Country1 = country1;
+			ViewBag.Country2 = country2;
+			ViewBag.Record1 = record1;
+			ViewBag.Record2 = record2;
+
+			return View();
+		}
+	}
 }

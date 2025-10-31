@@ -1,15 +1,13 @@
-﻿@using disease_outbreaks_detector.Models
-
-@{
-    var record = ViewBag.Record as CaseRecord;
-    var country = ViewBag.Country as string;
+﻿@{
+    var record1 = ViewBag.Record1 as disease_outbreaks_detector.Models.CaseRecord;
+    var record2 = ViewBag.Record2 as disease_outbreaks_detector.Models.CaseRecord;
+    var country1 = ViewBag.Country1 as string;
+    var country2 = ViewBag.Country2 as string;
     var error = ViewBag.Error as string;
 }
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Disease Outbreaks Monitor</title>
 
+<head>
+    <title>Compare Countries</title>
     <link rel="stylesheet" href="~/Styles/HomePage.css" />
     <link rel="stylesheet" href="~/Styles/Style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk&display=swap" rel="stylesheet">
@@ -86,60 +84,61 @@
     </header>
 
     <div class="container">
-        <h1>COVID-19 Data for @country</h1>
+        <h1>Compare COVID-19 Data</h1>
+
+        <form method="get" asp-action="CompareCountries">
+            <input type="text" name="country1" value="@country1" placeholder="Country 1" required />
+            <input type="text" name="country2" value="@country2" placeholder="Country 2" required />
+            <button type="submit">Compare</button>
+        </form>
 
         @if (!string.IsNullOrEmpty(error))
         {
             <div class="alert alert-warning">@error</div>
         }
-        else if (record != null)
+        else if (record1 != null && record2 != null)
         {
+            <h1 style="margin-bottom:10px; margin-top: 20px; font-size: 25px;">
+                @country1
+            </h1>
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total Cases</h3>
-                    <p>@(record.Cases > 0 ? record.Cases.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Today Cases</h3>
-                    <p>@(record.TodayCases > 0 ? record.TodayCases.ToString("N0") : "N/A")</p>
+                    <p>@(record1.Cases > 0 ? record1.Cases.ToString("N0") : "N/A")</p>
                 </div>
                 <div class="stat-card">
                     <h3>Deaths</h3>
-                    <p>@(record.Deaths > 0 ? record.Deaths.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Today Deaths</h3>
-                    <p>@(record.TodayDeaths > 0 ? record.TodayDeaths.ToString("N0") : "N/A")</p>
+                    <p>@(record1.Deaths > 0 ? record1.Deaths.ToString("N0") : "N/A")</p>
                 </div>
                 <div class="stat-card">
                     <h3>Recovered</h3>
-                    <p>@(record.Recovered > 0 ? record.Recovered.ToString("N0") : "N/A")</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Today Recovered</h3>
-                    <p>@(record.TodayRecovered > 0 ? record.TodayRecovered.ToString("N0") : "N/A")</p>
+                    <p>@(record1.Recovered > 0 ? record1.Recovered.ToString("N0") : "N/A")</p>
                 </div>
                 <div class="stat-card">
                     <h3>Population</h3>
-                    <p>@(record.population > 0 ? record.population.ToString("N0") : "N/A")</p>
+                    <p>@(record1.population > 0 ? record1.population.ToString("N0") : "N/A")</p>
+                </div>
+            </div>
+
+            <h1 style="margin-bottom:10px; font-size: 25px;">@country2</h1>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Cases</h3>
+                    <p>@(record2.Cases > 0 ? record2.Cases.ToString("N0") : "N/A")</p>
                 </div>
                 <div class="stat-card">
-                    <h3>Updated</h3>
-                    <p>@record.UpdatedAt.ToShortDateString()</p>
+                    <h3>Deaths</h3>
+                    <p>@(record2.Deaths > 0 ? record2.Deaths.ToString("N0") : "N/A")</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Recovered</h3>
+                    <p>@(record2.Recovered > 0 ? record2.Recovered.ToString("N0") : "N/A")</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Population</h3>
+                    <p>@(record2.population > 0 ? record2.population.ToString("N0") : "N/A")</p>
                 </div>
             </div>
         }
-        else
-        {
-            <div class="alert alert-info">Loading data... If error, check console.</div>
-        }
-
-        <form asp-action="Index" method="get">
-            <label for="country">Search by country:</label>
-            <input type="text" id="country" name="country" value="@country" placeholder="e.g., Ukraine" />
-            <button type="submit">Fetch Data</button>
-        </form>
     </div>
-
-    <div class="worldmap-container"></div>
 </body>

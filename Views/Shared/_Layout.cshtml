@@ -1,0 +1,13 @@
+﻿<div class="account-btn">
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <span>Hello, @User.Identity.Name!</span>
+        <a asp-controller="Account" asp-action="Logout" class="sing-text">Logout</a>
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="Login" class="sing-text">Sign in</a>
+        <span> | </span>
+        <a asp-controller="Account" asp-action="Register">Register</a>
+    }
+</div>

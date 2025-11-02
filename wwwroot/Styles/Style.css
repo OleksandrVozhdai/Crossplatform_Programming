@@ -252,7 +252,7 @@ path {
 }
 
 .hero .falling-box-2 {
-    width: 14;
+    width: 14px;
     position: absolute;
     top: 50px;
     right: 6vw;
@@ -512,3 +512,29 @@ path {
     opacity: 10%;
     z-index: 5;
 }
+
+.signin-btn,
+.logout-btn {
+    background: none;
+    border: none;
+    color: #C0C0A8;
+    font-family: 'Familjen Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    .signin-btn:hover,
+    .logout-btn:hover {
+        color: #ffffff;
+        text-decoration: underline;
+    }
+
+    .signin-btn:focus,
+    .logout-btn:focus {
+        outline: none;
+    }

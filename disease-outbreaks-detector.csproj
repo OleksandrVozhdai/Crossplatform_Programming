@@ -7,6 +7,7 @@
     <RootNamespace>disease_outbreaks_detector</RootNamespace>
 
 	 <IsPackable>true</IsPackable>
+    <UserSecretsId>083a2617-e981-4d7a-a33c-3da152a688d3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

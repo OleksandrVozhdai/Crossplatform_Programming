@@ -252,7 +252,7 @@ path {
 }
 
 .hero .falling-box-2 {
-    width: 14;
+    width: 14px;
     position: absolute;
     top: 50px;
     right: 6vw;
@@ -512,3 +512,102 @@ path {
     opacity: 10%;
     z-index: 5;
 }
+
+.signin-btn,
+.logout-btn {
+    background: none;
+    border: none;
+    color: #C0C0A8;
+    font-family: 'Familjen Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    .signin-btn:hover,
+    .logout-btn:hover {
+        color: #ffffff;
+        text-decoration: underline;
+    }
+
+    .signin-btn:focus,
+    .logout-btn:focus {
+        outline: none;
+    }
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #333;
+    user-select: none;
+}
+
+    .checkbox-label input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+.checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 4px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.checkbox-label input:checked ~ .checkmark {
+    background-color: #007bff;
+}
+
+.checkmark:after {
+    content: "";
+    display: none;
+}
+
+.checkbox-label input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-label .checkmark:after {
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.sing-text {
+    color: #201e1c;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+    .sing-text:hover {
+        background: #007bff;
+        color: white;
+        transform: translateY(-1px);
+    }

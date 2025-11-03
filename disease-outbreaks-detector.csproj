@@ -7,9 +7,13 @@
     <RootNamespace>disease_outbreaks_detector</RootNamespace>
 
 	 <IsPackable>true</IsPackable>
+    <UserSecretsId>083a2617-e981-4d7a-a33c-3da152a688d3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.10" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.10" />
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.20" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
@@ -35,7 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="DTOs\" />
   </ItemGroup>
 

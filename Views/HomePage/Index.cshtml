@@ -27,8 +27,8 @@
                 <a class="logo">
                     <img src="~/public/logo.png" alt="Logo">
                 </a>
-                <div class="nav-buttons" onclick="window.location.href='/Cases/ChoosePage'">
-                    <div class="shop-btn">
+                <div class="nav-buttons">
+                    <div class="shop-btn" onclick="window.location.href='/Cases/ChoosePage'">
                         <p> View All </p>
                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-circle-btn">
                             <circle cx="12.5" cy="12.5" r="12.5" class="svg-circle"></circle>
@@ -43,7 +43,6 @@
                 </div>
             </div>
 
-            <!-- ВИНОСИМО account-btn НАЗАД, АЛЕ ЗОВНІ logo-section -->
             <div class="contact-section">
                 <a> + 1 (888) 232-1901 </a>
                 <div class="account-btn">
@@ -72,7 +71,7 @@
                     }
                     else
                     {
-                        <!-- 100% РОБОЧА КНОПКА -->
+                      
                         <button type="button" class="sing-text signin-btn" onclick="window.location.href='/Account/Login'">Sign in</button>
                     }
                 </div>
@@ -81,7 +80,6 @@
         <span class="bottom-header-line"></span>
     </header>
 
-    <!-- ТУТ ВЕСЬ ТВІЙ КОНТЕНТ -->
     <main>
         <section class="hero">
             <div class="hero-wrapper">
@@ -94,7 +92,7 @@
                         <span class="text-wrapper"> <span style="--animation-order:4" class="slide-up">prevention</span></span>
                     </h1>
                     <p class="desc slide-up-text">Track, analyze, and respond to COVID-19 outbreaks faster with real-time surveillance and predictive analytics. </p>
-                    <a href="/collections/all-products" class="btn-wrapper btn-override">
+                    <a href="/Cases/Index" class="btn-wrapper btn-override">
                         <div class="btn">
                             <p>Explore Dashboard</p>
                         </div>

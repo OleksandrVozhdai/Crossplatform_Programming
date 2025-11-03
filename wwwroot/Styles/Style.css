@@ -72,6 +72,12 @@ header .contact-section {
 .logo {
     display: block;
     overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  cursor: pointer;
 }
 
 .logo img {
@@ -101,6 +107,21 @@ header .contact-section {
     gap: 9px;
     cursor: pointer;
     font-weight: bold;
+    transition: transform 0.3s ease-in-out;
+}
+
+.shop-btn:hover .svg-circle-btn .svg-circle 
+{
+    fill: black;
+}
+
+.shop-btn:hover {
+    transform:scale(1.05);
+}
+
+header a:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .bottom-header-line {
@@ -211,7 +232,14 @@ path {
     padding-bottom: 16px;
     border-radius: 50px;
     font-size: 18px;
+
+    transition: transform 0.3s ease-in-out;
 }
+
+    .box-content .btn:hover {
+        transform: scale(1.05);
+        background-color: #6A6A59;
+    }
 
 .box-content .stars-icon {
     margin-top: 17px;
@@ -252,7 +280,7 @@ path {
 }
 
 .hero .falling-box-2 {
-    width: 14px;
+    width: 400px;
     position: absolute;
     top: 50px;
     right: 6vw;
@@ -510,7 +538,7 @@ path {
     width: 800px;
     height: 800px;
     opacity: 10%;
-    z-index: 5;
+    z-index: -1;
 }
 
 .signin-btn,

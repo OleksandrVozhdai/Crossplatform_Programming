@@ -6,24 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ===  ŒÕ‘≤√”–¿÷≤ﬂ ===
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection")
                        ?? "Data Source=diseaseOutbreaksDB.db";
 
-// === ¡¿«» ƒ¿Õ»’ ===
-builder.Services.AddDbContext<AppDbContext>(options =>
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 
-// === —≈–¬≤—» ===
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ExternalApi>();
+
+//Case Services
+builder.Services.AddScoped<CaseRecordService>();
+
 
 // === IDENTITY ===
 builder.Services.AddIdentity<AppDbContextUser, IdentityRole>(options =>
@@ -58,23 +61,22 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-// œŒ–ﬂƒŒ  ¬¿∆À»¬»…:
-app.UseAuthentication();  // —ÔÓ˜‡ÚÍÛ Authentication
-app.UseAuthorization();   // œÓÚ≥Ï Authorization
+
+app.UseAuthentication();  
+app.UseAuthorization();   
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=HomePage}/{action=Index}/{id?}");
 
-// === Ã≤√–¿÷≤Ø + SEED ===
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
-// COVID ¡ƒ
-var caseDb = services.GetRequiredService<AppDbContext>();
+
+var caseDb = services.GetRequiredService<ApplicationDbContext>();
 caseDb.Database.Migrate();
 
-// Identity ¡ƒ
+
 var idDb = services.GetRequiredService<ApplicationDbContext>();
 idDb.Database.Migrate();
 

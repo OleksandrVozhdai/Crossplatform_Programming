@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using disease_outbreaks_detector.Models;
+using disease_outbreaks_detector.Data;
 
 namespace disease_outbreaks_detector.Controllers
 {
@@ -13,9 +14,9 @@ namespace disease_outbreaks_detector.Controllers
     [ApiController]
     public class CaseRecordController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CaseRecordController(AppDbContext context)
+        public CaseRecordController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -72,19 +73,35 @@ namespace disease_outbreaks_detector.Controllers
             return NoContent();
         }
 
-        // POST: api/CaseRecord
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<CaseRecord>> PostCaseRecord(CaseRecord caseRecord)
-        {
-            _context.CaseRecords.Add(caseRecord);
-            await _context.SaveChangesAsync();
+		// POST: api/CaseRecord
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<CaseRecord>> PostCaseRecord(CaseRecord caseRecord)
+		{
+			
+			var country = await _context.Countries
+				.FirstOrDefaultAsync(c => c.Name == caseRecord.Country);
 
-            return CreatedAtAction("GetCaseRecord", new { id = caseRecord.Id }, caseRecord);
-        }
+			if (country == null)
+			{
+			
+				country = new Country { Name = caseRecord.Country };
+				_context.Countries.Add(country);
+				await _context.SaveChangesAsync(); 
+			}
 
-        // DELETE: api/CaseRecord/5
-        [HttpDelete("{id}")]
+			
+			caseRecord.CountryId = country.Id;
+
+			_context.CaseRecords.Add(caseRecord);
+			await _context.SaveChangesAsync();
+
+			return CreatedAtAction("GetCaseRecord", new { id = caseRecord.Id }, caseRecord);
+		}
+
+
+		// DELETE: api/CaseRecord/5
+		[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCaseRecord(int id)
         {
             var caseRecord = await _context.CaseRecords.FindAsync(id);

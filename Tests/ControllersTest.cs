@@ -12,52 +12,53 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System;
+using disease_outbreaks_detector.Data;
 
 namespace disease_outbreaks_detector.Tests
 {
-    public class CaseRecordControllerTests
-    {
-        private AppDbContext GetInMemoryDbContext(string dbName)
-        {
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: dbName)
-                .Options;
+	public class CaseRecordControllerTests
+	{
+		private ApplicationDbContext GetInMemoryDbContext(string dbName)
+		{
+			var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+				.UseInMemoryDatabase(databaseName: dbName)
+				.Options;
 
-            var context = new AppDbContext(options);
+			var context = new ApplicationDbContext(options);
 
-            context.CaseRecords.AddRange(new List<CaseRecord>
-            {
-                new CaseRecord { Id = 1, Country = "USA", Cases = 100 },
-                new CaseRecord { Id = 2, Country = "UK", Cases = 50 }
-            });
-            context.SaveChanges();
+			context.CaseRecords.AddRange(new List<CaseRecord>
+			{
+				new CaseRecord { Id = 1, Country = "USA", Cases = 100 },
+				new CaseRecord { Id = 2, Country = "UK", Cases = 50 }
+			});
+			context.SaveChanges();
 
-            return context;
-        }
+			return context;
+		}
 
-        [Fact]
-        public async Task GetCaseRecords_Returns200Ok()
-        {
-            var context = GetInMemoryDbContext(Guid.NewGuid().ToString());
-            var controller = new CaseRecordController(context);
+		[Fact]
+		public async Task GetCaseRecords_Returns200Ok()
+		{
+			var context = GetInMemoryDbContext(Guid.NewGuid().ToString());
+			var controller = new CaseRecordController(context);
 
-            var result = await controller.GetCaseRecords();
+			var result = await controller.GetCaseRecords();
 
-            var okResult = Assert.IsType<ActionResult<IEnumerable<CaseRecord>>>(result);
-            var value = Assert.IsAssignableFrom<List<CaseRecord>>(okResult.Value);
-            Assert.Equal(2, value.Count);
-        }
+			var okResult = Assert.IsType<ActionResult<IEnumerable<CaseRecord>>>(result);
+			var value = Assert.IsAssignableFrom<List<CaseRecord>>(okResult.Value);
+			Assert.Equal(2, value.Count);
+		}
 
-        [Fact]
-        public async Task FetchAndStoreAsync_ReturnsValidRecord()
-        {
-            // Arrange
-            var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-            var context = new AppDbContext(options);
+		[Fact]
+		public async Task FetchAndStoreAsync_ReturnsValidRecord()
+		{
+			// Arrange
+			var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+			var context = new ApplicationDbContext(options);
 
-            // Mock HttpMessageHandler
-            var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            var expectedJson = @"{
+			// Mock HttpMessageHandler
+			var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var expectedJson = @"{
                 ""country"": ""USA"",
                 ""cases"": 111820082,
                 ""deaths"": 1219487,
@@ -68,38 +69,38 @@ namespace disease_outbreaks_detector.Tests
                 ""updated"": 1759791280154,
                 ""countryInfo"": { ""lat"": 38, ""long"": -97 }
             }";
-            var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(expectedJson) };
-            mockHandler.Protected()
-                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(response);
+			var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(expectedJson) };
+			mockHandler.Protected()
+				.Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+				.ReturnsAsync(response);
 
-            var httpClient = new HttpClient(mockHandler.Object);
-            var mockFactory = new Mock<IHttpClientFactory>();
-            mockFactory.Setup(f => f.CreateClient("default"))  // Setup for named client
-                .Returns(httpClient);
+			var httpClient = new HttpClient(mockHandler.Object);
+			var mockFactory = new Mock<IHttpClientFactory>();
+			mockFactory.Setup(f => f.CreateClient("default"))  // Setup for named client
+				.Returns(httpClient);
 
-            var service = new ExternalApi(context, mockFactory.Object);
+			var service = new ExternalApi(context, mockFactory.Object);
 
-            // Act
-            var result = await service.FetchAndStoreAsync("usa");
+			// Act
+			var result = await service.FetchAndStoreAsync("usa");
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal("USA", result.Country);
-            Assert.Equal(111820082, result.Cases);
-        }
+			// Assert
+			Assert.NotNull(result);
+			Assert.Equal("USA", result.Country);
+			Assert.Equal(111820082, result.Cases);
+		}
 
-        [Fact]
-        public async Task FetchAndStoreAsync_UpdatesExistingRecord()
-        {
-            // Arrange
-            var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-            var context = new AppDbContext(options);
-            context.CaseRecords.Add(new CaseRecord { Country = "usa", Cases = 100000 });
-            context.SaveChanges();
+		[Fact]
+		public async Task FetchAndStoreAsync_UpdatesExistingRecord()
+		{
+			// Arrange
+			var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+			var context = new ApplicationDbContext(options);
+			context.CaseRecords.Add(new CaseRecord { Country = "usa", Cases = 100000 });
+			context.SaveChanges();
 
-            var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            var expectedJson = @"{
+			var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var expectedJson = @"{
                 ""country"": ""USA"",
                 ""cases"": 111820082,
                 ""deaths"": 1219487,
@@ -110,39 +111,39 @@ namespace disease_outbreaks_detector.Tests
                 ""updated"": 1759791280154,
                 ""countryInfo"": { ""lat"": 38, ""long"": -97 }
             }";
-            var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(expectedJson) };
-            mockHandler.Protected()
-                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(response);
+			var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(expectedJson) };
+			mockHandler.Protected()
+				.Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+				.ReturnsAsync(response);
 
-            var httpClient = new HttpClient(mockHandler.Object);
-            var mockFactory = new Mock<IHttpClientFactory>();
-            mockFactory.Setup(f => f.CreateClient("default"))  // Setup for named client
-                .Returns(httpClient);
+			var httpClient = new HttpClient(mockHandler.Object);
+			var mockFactory = new Mock<IHttpClientFactory>();
+			mockFactory.Setup(f => f.CreateClient("default"))  // Setup for named client
+				.Returns(httpClient);
 
-            var service = new ExternalApi(context, mockFactory.Object);
+			var service = new ExternalApi(context, mockFactory.Object);
 
-            // Act
-            var result = await service.FetchAndStoreAsync("usa");
+			// Act
+			var result = await service.FetchAndStoreAsync("usa");
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(111820082, result.Cases);  // Updated
-        }
+			// Assert
+			Assert.NotNull(result);
+			Assert.Equal(111820082, result.Cases);  // Updated
+		}
 
-        [Fact]
-        public void CaseRecord_IsValid_WithFullData()
-        {
-            // Arrange
-            var record = new CaseRecord
-            {
-                Country = "USA",
-                Cases = 111820082,
-                Deaths = 1219487
-            };
+		[Fact]
+		public void CaseRecord_IsValid_WithFullData()
+		{
+			// Arrange
+			var record = new CaseRecord
+			{
+				Country = "USA",
+				Cases = 111820082,
+				Deaths = 1219487
+			};
 
-            // Act & Assert
-            Assert.True(record.IsValid());
-        }
-    }
+			// Act & Assert
+			Assert.True(record.IsValid());
+		}
+	}
 }

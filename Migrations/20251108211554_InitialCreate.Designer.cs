@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using disease_outbreaks_detector.Data;
 
@@ -10,9 +11,11 @@ using disease_outbreaks_detector.Data;
 namespace disease_outbreaks_detector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251108211554_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -233,13 +236,13 @@ namespace disease_outbreaks_detector.Migrations
                     b.Property<int>("Cases")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Country")
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CountryName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("CountryId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Critical")
                         .HasColumnType("INTEGER");
@@ -372,15 +375,17 @@ namespace disease_outbreaks_detector.Migrations
 
             modelBuilder.Entity("disease_outbreaks_detector.Models.CaseRecord", b =>
                 {
-                    b.HasOne("disease_outbreaks_detector.Models.Country", "CountryEntity")
+                    b.HasOne("disease_outbreaks_detector.Models.Country", "Country")
                         .WithMany("CaseRecords")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("disease_outbreaks_detector.Models.Source", "Source")
                         .WithMany("CaseRecords")
-                        .HasForeignKey("SourceId");
+                        .HasForeignKey("SourceId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.Navigation("CountryEntity");
+                    b.Navigation("Country");
 
                     b.Navigation("Source");
                 });

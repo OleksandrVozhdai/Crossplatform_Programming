@@ -12,7 +12,7 @@ namespace disease_outbreaks_detector.Models
         [StringLength(100)]
         public string Country { get; set; } = string.Empty;
 
-        public int Cases { get; set; }
+		public int Cases { get; set; }
         public int TodayCases { get; set; }
         public int Deaths { get; set; }
         public int TodayDeaths { get; set; }
@@ -24,6 +24,13 @@ namespace disease_outbreaks_detector.Models
         public double? Latitude { get; set; } 
         public double? Longitude { get; set; }
         public DateTime UpdatedAt { get; set; } = DateTime.Today.AddDays(-1);
+
+		//keys for Details (lab4)
+		public int? CountryId { get; set; }
+		public Country? CountryEntity { get; set; }
+
+		public int? SourceId { get; set; }
+		public Source? Source { get; set; }
 
 		// Validation method for tests
 		public bool IsValid()

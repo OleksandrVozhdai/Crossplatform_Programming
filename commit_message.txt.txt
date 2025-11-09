@@ -1,0 +1,9 @@
+feat(db): Add dynamic DB provider support (SQL Server, Postgres, SQLite, In-Memory)
+
+Implemented dynamic database provider selection based on the "Provider" key in appsettings.json. The application now supports multiple database backends.
+
+Added NuGet packages for SQL Server and Postgres.
+
+Aligned all EF Core, Identity, and Npgsql package versions to 8.0.4 to resolve migration generation conflicts.
+
+Improved startup logic to safely handle migration/seeding errors and skip migrations for In-Memory DB.

@@ -1,6 +1,8 @@
-﻿using disease_outbreaks_detector.Data;
+﻿using Azure;
+using disease_outbreaks_detector.Data;
 using disease_outbreaks_detector.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Policy;
 using System.Text.Json;
 
 namespace disease_outbreaks_detector.Services
@@ -20,9 +22,11 @@ namespace disease_outbreaks_detector.Services
 			_httpClient = httpClientFactory.CreateClient("default");  // Named client, mockable interface method
 		}
 
-		public async Task<CaseRecord?> FetchAndStoreAsync(string country)
+		public async Task<CaseRecord?> FetchAndStoreAsync(string country, int? numberOfDays = null)
 		{
+
 			var url = $"https://disease.sh/v3/covid-19/countries/{country}?yesterday=true&strict=true";
+			
 			var response = await _httpClient.GetAsync(url);
 
 			if (!response.IsSuccessStatusCode)

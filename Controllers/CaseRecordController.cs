@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using disease_outbreaks_detector.Models;
 using disease_outbreaks_detector.Data;
@@ -28,8 +23,24 @@ namespace disease_outbreaks_detector.Controllers
             return await _context.CaseRecords.ToListAsync();
         }
 
-        // GET: api/CaseRecord/5
-        [HttpGet("{id}")]
+		// GET: api/CaseRecord/Name/{country}
+		[HttpGet("Name/{country}")]
+		public async Task<ActionResult<CaseRecord>> GetCaseRecordByCountry(string country)
+		{
+			var record = await _context.CaseRecords
+				.FirstOrDefaultAsync(c => c.Country.ToLower() == country.ToLower());
+
+			if (record == null)
+			{
+				return NotFound($"No case record found for country: {country}");
+			}
+
+			return record;
+		}
+
+
+		// GET: api/CaseRecord/5
+		[HttpGet("{id}")]
         public async Task<ActionResult<CaseRecord>> GetCaseRecord(int id)
         {
             var caseRecord = await _context.CaseRecords.FindAsync(id);

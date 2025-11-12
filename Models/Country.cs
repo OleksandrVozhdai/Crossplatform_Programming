@@ -10,8 +10,8 @@ namespace disease_outbreaks_detector.Models
 		[Required]
 		public string Name { get; set; } = null!;
 
-
 		public string? IsoCode { get; set; }
+
 
 
 		public ICollection<CaseRecord>? CaseRecords { get; set; }

@@ -96,7 +96,7 @@
         {
             <div class="stat-card country-card">
                 <h3>@c.Name</h3>
-                <a asp-controller="Countries" asp-action="Details" asp-route-id="@c.Id" class="details-link">View Details</a>
+                <a asp-controller="Countries" asp-action="Details" asp-route-SelectedCountry="@c.Name" class="details-link">View Details</a>
             </div>
         }
     </div>

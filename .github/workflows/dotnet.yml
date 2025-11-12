@@ -31,7 +31,7 @@ jobs:
       uses: SonarSource/sonarqube-scan-action@v5.0.0
       env:
         SONAR_TOKEN: 3d915eeadd7f7aed527166bf8b7e5ddbfb57924d    
-        SONAR_PROJECT_KEY: crossplatformlab-university   
+        SONAR_PROJECT_KEY: OleksandrVozhdai_Crossplatform_Programming  
         SONAR_ORGANIZATION: crossplatformlab-university   
 
 

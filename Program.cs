@@ -3,6 +3,8 @@ using disease_outbreaks_detector.Models;
 using disease_outbreaks_detector.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +50,22 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+
+	var provider = builder.Services.BuildServiceProvider()
+					 .GetRequiredService<IApiVersionDescriptionProvider>();
+
+	
+	foreach (var description in provider.ApiVersionDescriptions)
+	{
+		options.SwaggerDoc(description.GroupName, new OpenApiInfo
+		{
+			Title = $"Disease Outbreaks Detector API {description.ApiVersion}",
+			Version = description.ApiVersion.ToString(),
+		});
+	}
+});
 
 
 builder.Services.AddHttpClient("default");
@@ -69,6 +86,22 @@ builder.Services.AddIdentity<AppDbContextUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddApiVersioning(options =>
+{
+	options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(2, 0);
+	options.AssumeDefaultVersionWhenUnspecified = true;
+	options.ReportApiVersions = true;
+});
+
+
+builder.Services.AddVersionedApiExplorer(options =>
+{
+	options.GroupNameFormat = "'v'VVV";
+	options.SubstituteApiVersionInUrl = true;
+});
+
+
+
 // === GOOGLE OAUTH2 ===
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
@@ -79,12 +112,17 @@ builder.Services.AddAuthentication()
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+var providerDesc = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
 
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+	foreach (var description in providerDesc.ApiVersionDescriptions)
+	{
+		options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+								$"API {description.GroupName.ToUpperInvariant()}");
+	}
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

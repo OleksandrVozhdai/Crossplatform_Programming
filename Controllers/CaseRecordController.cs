@@ -5,26 +5,34 @@ using disease_outbreaks_detector.Data;
 
 namespace disease_outbreaks_detector.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CaseRecordController : ControllerBase
-    {
-        private readonly ApplicationDbContext _context;
+	// Підтримуємо версії 1.0 і 2.0
+	[ApiVersion("1.0")]
+	[ApiVersion("2.0")]
+	[Route("api/v{version:apiVersion}/[controller]")]
+	[ApiController]
+	public class CaseRecordController : ControllerBase
+	{
+		private readonly ApplicationDbContext _context;
 
-        public CaseRecordController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		public CaseRecordController(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-        // GET: api/CaseRecord
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<CaseRecord>>> GetCaseRecords()
-        {
-            return await _context.CaseRecords.ToListAsync();
-        }
+		// GET: api/v{version}/CaseRecord
+		// Доступний у обох версіях (v1 і v2) — сумісність з попередньою версією
+		[HttpGet]
+		[MapToApiVersion("1.0")]
+		[MapToApiVersion("2.0")]
+		public async Task<ActionResult<IEnumerable<CaseRecord>>> GetCaseRecords()
+		{
+			return await _context.CaseRecords.ToListAsync();
+		}
 
-		// GET: api/CaseRecord/Name/{country}
+		// GET: api/v{version}/CaseRecord/Name/{country}
+		// Доступний у обох версіях — знайти запис по назві
 		[HttpGet("Name/{country}")]
+		[MapToApiVersion("2.0")]
 		public async Task<ActionResult<CaseRecord>> GetCaseRecordByCountry(string country)
 		{
 			var record = await _context.CaseRecords
@@ -38,98 +46,96 @@ namespace disease_outbreaks_detector.Controllers
 			return record;
 		}
 
-
-		// GET: api/CaseRecord/5
+		// GET: api/v{version}/CaseRecord/{id}
 		[HttpGet("{id}")]
-        public async Task<ActionResult<CaseRecord>> GetCaseRecord(int id)
-        {
-            var caseRecord = await _context.CaseRecords.FindAsync(id);
+		[MapToApiVersion("1.0")]
+		[MapToApiVersion("2.0")]
+		public async Task<ActionResult<CaseRecord>> GetCaseRecord(int id)
+		{
+			var caseRecord = await _context.CaseRecords.FindAsync(id);
 
-            if (caseRecord == null)
-            {
-                return NotFound();
-            }
+			if (caseRecord == null)
+			{
+				return NotFound();
+			}
 
-            return caseRecord;
-        }
+			return caseRecord;
+		}
 
-        // PUT: api/CaseRecord/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCaseRecord(int id, CaseRecord caseRecord)
-        {
-            if (id != caseRecord.Id)
-            {
-                return BadRequest();
-            }
+		// NEW in v2: GET list of country names
+		// GET: api/v2/CaseRecord/countries
+		// ЦЕЙ ендпоінт є ТІЛЬКИ в версії 2.0
+		[HttpGet("countries")]
+		[MapToApiVersion("2.0")]
+		public async Task<ActionResult<IEnumerable<string>>> GetCountryNames()
+		{
+			var names = await _context.CaseRecords
+				.Select(c => c.Country)
+				.Where(n => !string.IsNullOrEmpty(n))
+				.Distinct()
+				.ToListAsync();
 
-            _context.Entry(caseRecord).State = EntityState.Modified;
+			return names;
+		}
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CaseRecordExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+		// PUT, POST, DELETE — залишаємо як було; мапимо на обидві версії
+		[HttpPut("{id}")]
+		[MapToApiVersion("1.0")]
+		[MapToApiVersion("2.0")]
+		public async Task<IActionResult> PutCaseRecord(int id, CaseRecord caseRecord)
+		{
+			if (id != caseRecord.Id) return BadRequest();
 
-            return NoContent();
-        }
+			_context.Entry(caseRecord).State = EntityState.Modified;
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!CaseRecordExists(id)) return NotFound();
+				throw;
+			}
+			return NoContent();
+		}
 
-		// POST: api/CaseRecord
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
+		[MapToApiVersion("1.0")]
+		[MapToApiVersion("2.0")]
 		public async Task<ActionResult<CaseRecord>> PostCaseRecord(CaseRecord caseRecord)
 		{
-			
 			var country = await _context.Countries
 				.FirstOrDefaultAsync(c => c.Name == caseRecord.Country);
 
 			if (country == null)
 			{
-			
 				country = new Country { Name = caseRecord.Country };
 				_context.Countries.Add(country);
-				await _context.SaveChangesAsync(); 
+				await _context.SaveChangesAsync();
 			}
 
-			
 			caseRecord.CountryId = country.Id;
 
 			_context.CaseRecords.Add(caseRecord);
 			await _context.SaveChangesAsync();
 
-			return CreatedAtAction("GetCaseRecord", new { id = caseRecord.Id }, caseRecord);
+			return CreatedAtAction(nameof(GetCaseRecord), new { id = caseRecord.Id, version = "2.0" }, caseRecord);
 		}
 
-
-		// DELETE: api/CaseRecord/5
 		[HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCaseRecord(int id)
-        {
-            var caseRecord = await _context.CaseRecords.FindAsync(id);
-            if (caseRecord == null)
-            {
-                return NotFound();
-            }
+		[MapToApiVersion("1.0")]
+		[MapToApiVersion("2.0")]
+		public async Task<IActionResult> DeleteCaseRecord(int id)
+		{
+			var caseRecord = await _context.CaseRecords.FindAsync(id);
+			if (caseRecord == null) return NotFound();
 
-            _context.CaseRecords.Remove(caseRecord);
-            await _context.SaveChangesAsync();
+			_context.CaseRecords.Remove(caseRecord);
+			await _context.SaveChangesAsync();
+			return NoContent();
+		}
 
-            return NoContent();
-        }
-
-        private bool CaseRecordExists(int id)
-        {
-            return _context.CaseRecords.Any(e => e.Id == id);
-        }
-    }
+		private bool CaseRecordExists(int id) =>
+			_context.CaseRecords.Any(e => e.Id == id);
+	}
 }

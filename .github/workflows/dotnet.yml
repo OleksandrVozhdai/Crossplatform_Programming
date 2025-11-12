@@ -26,14 +26,14 @@ jobs:
 
     - name: Run Tests
       run: dotnet test --no-build --verbosity normal
-      
+    
     - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@master
-      with:
-        projectKey: crossplatformlab-university
-        organization: crossplatformlab-university      
+      uses: SonarSource/sonarqube-scan-action@v5.0.0
       env:
-        SONAR_TOKEN: 3d915eeadd7f7aed527166bf8b7e5ddbfb57924d
+        SONAR_TOKEN: 3d915eeadd7f7aed527166bf8b7e5ddbfb57924d    
+        SONAR_PROJECT_KEY: crossplatformlab-university   
+        SONAR_ORGANIZATION: crossplatformlab-university   
+
 
 
 

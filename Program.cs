@@ -6,22 +6,57 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var configuration = builder.Configuration;
-var connectionString = configuration.GetConnectionString("DefaultConnection")
-                       ?? "Data Source=diseaseOutbreaksDB.db";
+// === НАЛАШТУВАННЯ ENTITY FRAMEWORK З ДИНАМІЧНИМ ПРОВАЙДЕРОМ ===
 
+// 1. Отримуємо назву провайдера з appsettings.json
+var provider = builder.Configuration.GetValue<string>("Provider");
 
+// 2. Реєструємо ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+{
+    switch (provider)
+    {
+        case "SqlServer":
+            // a. MS-SQL
+            var sqlServerConStr = builder.Configuration.GetConnectionString("SqlServer");
+            options.UseSqlServer(sqlServerConStr);
+            Console.WriteLine("Using MS-SQL Server");
+            break;
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+        case "Postgres":
+            // b. Postgres
+            var postgresConStr = builder.Configuration.GetConnectionString("Postgres");
+            options.UseNpgsql(postgresConStr);
+            Console.WriteLine("Using PostgreSQL");
+            break;
+
+        case "InMemory":
+            // d. In-Memory
+            options.UseInMemoryDatabase("InMemoryDb");
+            Console.WriteLine("Using In-Memory Database");
+            break;
+
+        case "Sqlite":
+        default:
+            // c. SqlLite (за замовчуванням)
+            var sqliteConStr = builder.Configuration.GetConnectionString("Sqlite")
+                               ?? "Data Source=diseaseOutbreaksDB.db";
+            options.UseSqlite(sqliteConStr);
+            Console.WriteLine("Using SQLite");
+            break;
+    }
+});
+
+// ===============================================================
 
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddHttpClient();
+
+// Додаємо HttpClientFactory та іменуємо клієнт "default"
+builder.Services.AddHttpClient("default");
+
 builder.Services.AddScoped<ExternalApi>();
 
 //Case Services
@@ -44,8 +79,9 @@ builder.Services.AddIdentity<AppDbContextUser, IdentityRole>(options =>
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
-        options.ClientId = configuration["Authentication:Google:ClientId"]!;
-        options.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
+        // ВИПРАВЛЕНО: Використовуємо builder.Configuration
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
     });
 
 var app = builder.Build();
@@ -62,34 +98,36 @@ app.UseStaticFiles();
 app.UseRouting();
 
 
-app.UseAuthentication();  
-app.UseAuthorization();   
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=HomePage}/{action=Index}/{id?}");
 
+// === ЗАПУСК МІГРАЦІЙ ТА НАПОВНЕННЯ БАЗИ (SEED) ===
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
-
-var caseDb = services.GetRequiredService<ApplicationDbContext>();
-caseDb.Database.Migrate();
-
-
-var idDb = services.GetRequiredService<ApplicationDbContext>();
-idDb.Database.Migrate();
-
-// Seed USA
-var externalApi = services.GetRequiredService<ExternalApi>();
 try
 {
+    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+
+    // Перевіряємо, чи база даних не є In-Memory, перш ніж застосовувати міграції
+    if (provider != "InMemory")
+    {
+        await dbContext.Database.MigrateAsync();
+        Console.WriteLine("Database migration applied.");
+    }
+
+    // Seed USA (Наповнення початковими даними)
+    var externalApi = services.GetRequiredService<ExternalApi>();
     await externalApi.FetchAndStoreAsync("usa");
     Console.WriteLine("Seed USA — OK");
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Seed error: {ex.Message}");
+    Console.WriteLine($"An error occurred during DB migration or seeding: {ex.Message}");
 }
 
 app.Run();

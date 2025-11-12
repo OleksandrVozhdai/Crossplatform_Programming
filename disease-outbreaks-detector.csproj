@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
+    <IsTestProject>false</IsTestProject>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>disease_outbreaks_detector</RootNamespace>
-
+    
     <IsPackable>true</IsPackable>
     <UserSecretsId>083a2617-e981-4d7a-a33c-3da152a688d3</UserSecretsId>
     <!-- Ця властивість запобігає помилкам з версіями -->

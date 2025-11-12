@@ -14,16 +14,19 @@ namespace disease_outbreaks_detector.Controllers
 			_context = context;
 		}
 
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(string filterString)
 		{
-			
+
 			var countries = await _context.CaseRecords
 				.Select(c => new CountryViewModel
 				{
 					Id = c.Id,
 					Name = c.Country
 				})
+				.Where(c => string.IsNullOrEmpty(filterString) || c.Name.StartsWith(filterString) || c.Name.EndsWith(filterString))
 				.ToListAsync();
+
+			ViewBag.Filter = filterString;
 
 			return View(countries);
 		}

@@ -33,7 +33,7 @@ jobs:
         projectKey: crossplatformlab-university
         organization: crossplatformlab-university      
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_TOKEN: 3d915eeadd7f7aed527166bf8b7e5ddbfb57924d
 
 
 

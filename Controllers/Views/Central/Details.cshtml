@@ -1,0 +1,52 @@
+﻿@* Тут ми очікуємо НЕ список, а ОДИН об'єкт типу CaseRecord *@
+@model disease_outbreaks_detector.Models.CaseRecord
+
+@{
+    ViewData["Title"] = "Details for " + Model.Country;
+}
+
+<h2>Детальна інформація: @Model.Country</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">ID</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Id)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Country)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Country)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Cases)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Cases)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TodayCases)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TodayCases)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Deaths)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Deaths)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TodayDeaths)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TodayDeaths)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Recovered)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Recovered)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TodayRecovered)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TodayRecovered)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.population)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.population)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Active)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Active)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Critical)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Critical)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.UpdatedAt)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.UpdatedAt)</dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Повернутись до списку</a>
+</div>

@@ -1,0 +1,116 @@
+﻿<head>
+    <title>Choose page</title>
+    <link rel="stylesheet" href="~/Styles/HomePage.css" />
+    <link rel="stylesheet" href="~/Styles/Style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk&display=swap" rel="stylesheet">
+</head>
+
+
+
+<body>
+    <div class="nav-upper-panel">
+        <div class="nav-upper-panel-ov">
+            <div class="nav-upper-panel-bar">
+                <p>Made in Ukraine</p>
+                <p>Stay informed with real-time COVID-19 monitoring worldwide.</p>
+                <a><b>Public Health Support</b></a>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/HomePage/Index">
+                    <img src="~/public/logo.png">
+                </a>
+                <div class="nav-buttons">
+                    <div class="shop-btn" onclick="window.location.href='/Cases/ChoosePage'">
+                        <p> View All </p>
+                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-circle-btn">
+                            <circle cx="12.5" cy="12.5" r="12.5" class="svg-circle"></circle>
+                            <path d="M20.7071 13.7071C21.0976 13.3166 21.0976 12.6834 20.7071 12.2929L14.3431 5.92893C13.9526
+                            5.53841 13.3195 5.53841 12.9289 5.92893C12.5384 6.31946 12.5384 6.95262 12.9289 7.34315L18.5858
+                            13L12.9289 18.6569C12.5384 19.0474 12.5384 19.6805 12.9289 20.0711C13.3195 20.4616 13.9526 20.4616
+                            14.3431 20.0711L20.7071 13.7071ZM5 14H20V12H5V14Z" class="svg-arrow"></path>
+                        </svg>
+
+                    </div>
+                    <a> FAQs </a>
+                    <a> Submit a Report </a>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <a> + 1 (888) 232-1901 </a>
+                <div class="account-btn">
+                    <a style="height: 32px">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.0648 27.5603C12.1984 27.5603 8.78048 25.5807
+                6.78542 22.6114C6.83181 19.5182 12.9717 17.817 16.0648 17.817C19.1579 17.817
+                25.2977 19.5182 25.3441 22.6114C23.3491 25.5807 19.9312 27.5603 16.0648 27.5603ZM16.0648
+                5.59921C17.2953 5.59921 18.4754 6.08803 19.3455 6.95814C20.2156 7.82825 20.7044 9.00837
+                20.7044 10.2389C20.7044 11.4694 20.2156 12.6495 19.3455 13.5196C18.4754 14.3897 17.2953
+                14.8786 16.0648 14.8786C14.8342 14.8786 13.6541 14.3897 12.784 13.5196C11.9139 12.6495
+                11.4251 11.4694 11.4251 10.2389C11.4251 9.00837 11.9139 7.82825 12.784 6.95814C13.6541 6.08803
+                14.8342 5.59921 16.0648 5.59921ZM16.0648 0.959534C14.0338 0.959534 12.0227 1.35956 10.1463
+                2.13678C8.26997 2.914 6.56506 4.05319 5.12895 5.4893C2.22859 8.38966 0.599182 12.3234 0.599182
+                16.4251C0.599182 20.5268 2.22859 24.4606 5.12895 27.3609C6.56506 28.7971 8.26997 29.9362 10.1463
+                30.7135C12.0227 31.4907 14.0338 31.8907 16.0648 31.8907C20.1665 31.8907 24.1002 30.2613 27.0006
+                27.3609C29.9009 24.4606 31.5304 20.5268 31.5304 16.4251C31.5304 7.87265 24.5708 0.959534 16.0648
+                0.959534Z" fill="#C0C0A8"></path>
+                        </svg>
+                    </a>
+
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <span class="sing-text">Hello, @User.Identity.Name!</span>
+                        <button type="button" class="sing-text logout-btn" onclick="window.location.href='@Url.Action("Logout", "Account")'">Logout</button>
+                    }
+                    else
+                    {
+
+                        <button type="button" class="sing-text signin-btn" onclick="window.location.href='/Account/Login'">Sign in</button>
+                    }
+                </div>
+            </div>
+        </div>
+        <span class="bottom-header-line"> </span>
+    </header>
+
+    <div class="center-buttons">
+        <button onclick="window.location.href='/Cases/index'" class="white-button" style="margin-top:-100px">
+            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            Fetch Country Data
+        </button>
+
+        <button onclick="window.location.href='/Cases/CompareCountries'" class="white-button" style="margin-top:20px">
+            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+            </svg>
+            Compare Countries
+        </button>
+
+        <button onclick="window.location.href='/Countries/Index'" class="white-button" style="margin-top:-220px" >
+
+            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="-5 0 26 15" width="25" height="21">
+                <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"></path>
+                <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"></path>
+                <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"></path>
+            </svg>
+            History
+
+        </button>
+
+        <img alt="" src="~/public/corona.png">
+
+    </div>
+
+</body>

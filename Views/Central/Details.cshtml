@@ -1,4 +1,9 @@
-﻿<head>
+﻿@model disease_outbreaks_detector.Models.CaseRecord
+
+@{
+    ViewData["Title"] = "Details for " + Model.Country;
+}
+<head>
     <title>Choose page</title>
     <link rel="stylesheet" href="~/Styles/HomePage.css" />
     <link rel="stylesheet" href="~/Styles/Style.css" />
@@ -77,52 +82,89 @@
         </div>
         <span class="bottom-header-line"> </span>
     </header>
+<style>
+    .details-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 25px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid #eee;
+    }
 
-    <div class="center-buttons">
-        <button onclick="window.location.href='/Cases/index'" class="white-button" style="margin-top:-100px">
-            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-            Fetch Country Data
-        </button>
+    /* Це стилі для нашого списку <dl> */
+    .details-list {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 15px 20px;
+    }
 
-        <button onclick="window.location.href='/Cases/CompareCountries'" class="white-button" style="margin-top:20px">
-            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="17 1 21 5 17 9"></polyline>
-                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-                <polyline points="7 23 3 19 7 15"></polyline>
-                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-            </svg>
-            Compare Countries
-        </button>
+    .details-list dt {
+        font-weight: 600;
+        text-align: right;
+        color: #555;
+    }
 
-        <button onclick="window.location.href='/Central/Index'" class="white-button" style="margin-top:140px">
-            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="8" y1="6" x2="21" y2="6"></line>
-                <line x1="8" y1="12" x2="21" y2="12"></line>
-                <line x1="8" y1="18" x2="21" y2="18"></line>
-                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-            </svg>
-            Case Records
-        </button>
+    .details-list dd {
+        margin-left: 0;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #000;
+    }
 
-        <button onclick="window.location.href='/Countries/Index'" class="white-button" style="margin-top:-220px" >
+    .details-back-link {
+        display: inline-block;
+        margin-top: 25px;
+        font-size: 1.1rem;
+        color: #007bff;
+    }
+</style>
 
-            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="-5 0 26 15" width="25" height="21">
-                <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"></path>
-                <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"></path>
-                <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"></path>
-            </svg>
-            History
+<div class="details-container">
+    <h2>Детальна інформація: @Model.Country</h2>
+    <hr />
 
-        </button>
+    <dl class="details-list">
+        <dt>ID</dt>
+        <dd>@Html.DisplayFor(model => model.Id)</dd>
 
-        <img alt="" src="~/public/corona.png">
+        <dt>@Html.DisplayNameFor(model => model.Country)</dt>
+        <dd>@Html.DisplayFor(model => model.Country)</dd>
 
+        <dt>@Html.DisplayNameFor(model => model.Cases)</dt>
+        <dd>@Html.DisplayFor(model => model.Cases)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.TodayCases)</dt>
+        <dd>@Html.DisplayFor(model => model.TodayCases)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Deaths)</dt>
+        <dd>@Html.DisplayFor(model => model.Deaths)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.TodayDeaths)</dt>
+        <dd>@Html.DisplayFor(model => model.TodayDeaths)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Recovered)</dt>
+        <dd>@Html.DisplayFor(model => model.Recovered)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.TodayRecovered)</dt>
+        <dd>@Html.DisplayFor(model => model.TodayRecovered)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.population)</dt>
+        <dd>@Html.DisplayFor(model => model.population)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Active)</dt>
+        <dd>@Html.DisplayFor(model => model.Active)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Critical)</dt>
+        <dd>@Html.DisplayFor(model => model.Critical)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.UpdatedAt)</dt>
+        <dd>@Html.DisplayFor(model => model.UpdatedAt)</dd>
+    </dl>
+
+    <div>
+        <a asp-action="Index" class="details-back-link">Повернутись до списку</a>
     </div>
-
+</div>
 </body>

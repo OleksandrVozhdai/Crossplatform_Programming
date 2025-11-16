@@ -1,170 +1,52 @@
-﻿@model disease_outbreaks_detector.Models.CaseRecord
+﻿@* Тут ми очікуємо НЕ список, а ОДИН об'єкт типу CaseRecord *@
+@model disease_outbreaks_detector.Models.CaseRecord
 
 @{
     ViewData["Title"] = "Details for " + Model.Country;
 }
-<head>
-    <title>Choose page</title>
-    <link rel="stylesheet" href="~/Styles/HomePage.css" />
-    <link rel="stylesheet" href="~/Styles/Style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk&display=swap" rel="stylesheet">
-</head>
 
+<h2>Детальна інформація: @Model.Country</h2>
 
-
-<body>
-    <div class="nav-upper-panel">
-        <div class="nav-upper-panel-ov">
-            <div class="nav-upper-panel-bar">
-                <p>Made in Ukraine</p>
-                <p>Stay informed with real-time COVID-19 monitoring worldwide.</p>
-                <a><b>Public Health Support</b></a>
-            </div>
-        </div>
-    </div>
-
-    <header>
-        <div class="header-bar">
-            <div class="logo-section">
-                <a class="logo" href="/HomePage/Index">
-                    <img src="~/public/logo.png">
-                </a>
-                <div class="nav-buttons">
-                    <div class="shop-btn" onclick="window.location.href='/Cases/ChoosePage'">
-                        <p> View All </p>
-                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-circle-btn">
-                            <circle cx="12.5" cy="12.5" r="12.5" class="svg-circle"></circle>
-                            <path d="M20.7071 13.7071C21.0976 13.3166 21.0976 12.6834 20.7071 12.2929L14.3431 5.92893C13.9526
-                            5.53841 13.3195 5.53841 12.9289 5.92893C12.5384 6.31946 12.5384 6.95262 12.9289 7.34315L18.5858
-                            13L12.9289 18.6569C12.5384 19.0474 12.5384 19.6805 12.9289 20.0711C13.3195 20.4616 13.9526 20.4616
-                            14.3431 20.0711L20.7071 13.7071ZM5 14H20V12H5V14Z" class="svg-arrow"></path>
-                        </svg>
-
-                    </div>
-                    <a> FAQs </a>
-                    <a> Submit a Report </a>
-                </div>
-            </div>
-
-            <div class="contact-section">
-                <a> + 1 (888) 232-1901 </a>
-                <div class="account-btn">
-                    <a style="height: 32px">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16.0648 27.5603C12.1984 27.5603 8.78048 25.5807
-                6.78542 22.6114C6.83181 19.5182 12.9717 17.817 16.0648 17.817C19.1579 17.817
-                25.2977 19.5182 25.3441 22.6114C23.3491 25.5807 19.9312 27.5603 16.0648 27.5603ZM16.0648
-                5.59921C17.2953 5.59921 18.4754 6.08803 19.3455 6.95814C20.2156 7.82825 20.7044 9.00837
-                20.7044 10.2389C20.7044 11.4694 20.2156 12.6495 19.3455 13.5196C18.4754 14.3897 17.2953
-                14.8786 16.0648 14.8786C14.8342 14.8786 13.6541 14.3897 12.784 13.5196C11.9139 12.6495
-                11.4251 11.4694 11.4251 10.2389C11.4251 9.00837 11.9139 7.82825 12.784 6.95814C13.6541 6.08803
-                14.8342 5.59921 16.0648 5.59921ZM16.0648 0.959534C14.0338 0.959534 12.0227 1.35956 10.1463
-                2.13678C8.26997 2.914 6.56506 4.05319 5.12895 5.4893C2.22859 8.38966 0.599182 12.3234 0.599182
-                16.4251C0.599182 20.5268 2.22859 24.4606 5.12895 27.3609C6.56506 28.7971 8.26997 29.9362 10.1463
-                30.7135C12.0227 31.4907 14.0338 31.8907 16.0648 31.8907C20.1665 31.8907 24.1002 30.2613 27.0006
-                27.3609C29.9009 24.4606 31.5304 20.5268 31.5304 16.4251C31.5304 7.87265 24.5708 0.959534 16.0648
-                0.959534Z" fill="#C0C0A8"></path>
-                        </svg>
-                    </a>
-
-                    @if (User.Identity?.IsAuthenticated ?? false)
-                    {
-                        <span class="sing-text">Hello, @User.Identity.Name!</span>
-                        <button type="button" class="sing-text logout-btn" onclick="window.location.href='@Url.Action("Logout", "Account")'">Logout</button>
-                    }
-                    else
-                    {
-
-                        <button type="button" class="sing-text signin-btn" onclick="window.location.href='/Account/Login'">Sign in</button>
-                    }
-                </div>
-            </div>
-        </div>
-        <span class="bottom-header-line"> </span>
-    </header>
-<style>
-    .details-container {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 25px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-        border: 1px solid #eee;
-    }
-
-    /* Це стилі для нашого списку <dl> */
-    .details-list {
-        display: grid;
-        grid-template-columns: 200px 1fr;
-        gap: 15px 20px;
-    }
-
-    .details-list dt {
-        font-weight: 600;
-        text-align: right;
-        color: #555;
-    }
-
-    .details-list dd {
-        margin-left: 0;
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: #000;
-    }
-
-    .details-back-link {
-        display: inline-block;
-        margin-top: 25px;
-        font-size: 1.1rem;
-        color: #007bff;
-    }
-</style>
-
-<div class="details-container">
-    <h2>Детальна інформація: @Model.Country</h2>
+<div>
     <hr />
+    <dl class="row">
+        <dt class="col-sm-3">ID</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Id)</dd>
 
-    <dl class="details-list">
-        <dt>ID</dt>
-        <dd>@Html.DisplayFor(model => model.Id)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Country)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Country)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Country)</dt>
-        <dd>@Html.DisplayFor(model => model.Country)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Cases)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Cases)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Cases)</dt>
-        <dd>@Html.DisplayFor(model => model.Cases)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TodayCases)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TodayCases)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.TodayCases)</dt>
-        <dd>@Html.DisplayFor(model => model.TodayCases)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Deaths)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Deaths)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Deaths)</dt>
-        <dd>@Html.DisplayFor(model => model.Deaths)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TodayDeaths)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TodayDeaths)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.TodayDeaths)</dt>
-        <dd>@Html.DisplayFor(model => model.TodayDeaths)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Recovered)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Recovered)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Recovered)</dt>
-        <dd>@Html.DisplayFor(model => model.Recovered)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TodayRecovered)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TodayRecovered)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.TodayRecovered)</dt>
-        <dd>@Html.DisplayFor(model => model.TodayRecovered)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.population)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.population)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.population)</dt>
-        <dd>@Html.DisplayFor(model => model.population)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Active)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Active)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Active)</dt>
-        <dd>@Html.DisplayFor(model => model.Active)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Critical)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Critical)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Critical)</dt>
-        <dd>@Html.DisplayFor(model => model.Critical)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.UpdatedAt)</dt>
-        <dd>@Html.DisplayFor(model => model.UpdatedAt)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.UpdatedAt)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.UpdatedAt)</dd>
     </dl>
-
-    <div>
-        <a asp-action="Index" class="details-back-link">Повернутись до списку</a>
-    </div>
 </div>
-</body>
+<div>
+    <a asp-action="Index">Повернутись до списку</a>
+</div>

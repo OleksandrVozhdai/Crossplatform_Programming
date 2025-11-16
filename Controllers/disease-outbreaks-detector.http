@@ -1,6 +1,0 @@
-@disease_outbreaks_detector_HostAddress = http://localhost:5052
-
-GET {{disease_outbreaks_detector_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

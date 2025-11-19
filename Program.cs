@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -109,6 +113,30 @@ builder.Services.AddAuthentication()
         options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
         options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
     });
+
+
+// ZIPKIN + TELEMETRY
+
+// ======================= OPENTELEMETRY + ZIPKIN ==========================
+builder.Services.AddOpenTelemetry()
+	.WithTracing(tracing =>
+	{
+		tracing
+			.AddAspNetCoreInstrumentation()
+			.AddHttpClientInstrumentation()
+			.AddEntityFrameworkCoreInstrumentation()
+			.AddSource("DiseaseOutbreaks")
+			.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("DiseaseOutbreaksAPI"))
+			.AddZipkinExporter();
+	})
+	.WithMetrics(metrics =>
+	{
+        metrics
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddProcessInstrumentation();
+	});
 
 var app = builder.Build();
 

@@ -3,32 +3,78 @@ using disease_outbreaks_detector.Models;
 using disease_outbreaks_detector.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var configuration = builder.Configuration;
-var connectionString = configuration.GetConnectionString("DefaultConnection")
-                       ?? "Data Source=diseaseOutbreaksDB.db";
-
+var provider = builder.Configuration.GetValue<string>("Provider");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+{
+    switch (provider)
+    {
+        case "SqlServer":
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+            var sqlServerConStr = builder.Configuration.GetConnectionString("SqlServer");
+            options.UseSqlServer(sqlServerConStr);
+            Console.WriteLine("Using MS-SQL Server");
+            break;
+
+        case "Postgres":
+
+            var postgresConStr = builder.Configuration.GetConnectionString("Postgres");
+            options.UseNpgsql(postgresConStr);
+            Console.WriteLine("Using PostgreSQL");
+            break;
+
+        case "InMemory":
+
+            options.UseInMemoryDatabase("InMemoryDb");
+            Console.WriteLine("Using In-Memory Database");
+            break;
+
+        case "Sqlite":
+        default:
+
+            var sqliteConStr = builder.Configuration.GetConnectionString("Sqlite")
+                               ?? "Data Source=diseaseOutbreaksDB.db";
+            options.UseSqlite(sqliteConStr);
+            Console.WriteLine("Using SQLite");
+            break;
+    }
+});
+
+// ===============================================================
 
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddHttpClient();
+builder.Services.AddSwaggerGen(options =>
+{
+
+	var provider = builder.Services.BuildServiceProvider()
+					 .GetRequiredService<IApiVersionDescriptionProvider>();
+
+	
+	foreach (var description in provider.ApiVersionDescriptions)
+	{
+		options.SwaggerDoc(description.GroupName, new OpenApiInfo
+		{
+			Title = $"Disease Outbreaks Detector API {description.ApiVersion}",
+			Version = description.ApiVersion.ToString(),
+		});
+	}
+});
+
+
+builder.Services.AddHttpClient("default");
+
 builder.Services.AddScoped<ExternalApi>();
 
-//Case Services
 builder.Services.AddScoped<CaseRecordService>();
 
 
-// === IDENTITY ===
 builder.Services.AddIdentity<AppDbContextUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -40,30 +86,50 @@ builder.Services.AddIdentity<AppDbContextUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddApiVersioning(options =>
+{
+	options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(2, 0);
+	options.AssumeDefaultVersionWhenUnspecified = true;
+	options.ReportApiVersions = true;
+});
+
+
+builder.Services.AddVersionedApiExplorer(options =>
+{
+	options.GroupNameFormat = "'v'VVV";
+	options.SubstituteApiVersionInUrl = true;
+});
+
+
+
 // === GOOGLE OAUTH2 ===
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
-        options.ClientId = configuration["Authentication:Google:ClientId"]!;
-        options.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
     });
 
 var app = builder.Build();
 
-// === MIDDLEWARE ===
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+var providerDesc = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
 
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+	foreach (var description in providerDesc.ApiVersionDescriptions)
+	{
+		options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+								$"API {description.GroupName.ToUpperInvariant()}");
+	}
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
 
-app.UseAuthentication();  
-app.UseAuthorization();   
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
@@ -72,24 +138,23 @@ app.MapControllerRoute(
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
-
-var caseDb = services.GetRequiredService<ApplicationDbContext>();
-caseDb.Database.Migrate();
-
-
-var idDb = services.GetRequiredService<ApplicationDbContext>();
-idDb.Database.Migrate();
-
-// Seed USA
-var externalApi = services.GetRequiredService<ExternalApi>();
 try
 {
+    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+
+    if (provider != "InMemory")
+    {
+        await dbContext.Database.MigrateAsync();
+        Console.WriteLine("Database migration applied.");
+    }
+
+    var externalApi = services.GetRequiredService<ExternalApi>();
     await externalApi.FetchAndStoreAsync("usa");
     Console.WriteLine("Seed USA — OK");
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Seed error: {ex.Message}");
+    Console.WriteLine($"An error occurred during DB migration or seeding: {ex.Message}");
 }
 
 app.Run();

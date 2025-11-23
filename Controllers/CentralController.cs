@@ -1,37 +1,36 @@
-﻿using disease_outbreaks_detector.Data;
-using disease_outbreaks_detector.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using disease_outbreaks_detector.Data;
+using disease_outbreaks_detector.Models;
 
 namespace disease_outbreaks_detector.Controllers
 {
-    public class CentralController : Controller
-    {
-        private readonly ApplicationDbContext _context;
+	public class CentralController : Controller
+	{
 
-        // Конструктор для отримання доступу до бази даних
-        public CentralController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		private readonly ApplicationDbContext _context;
+		public CentralController(ApplicationDbContext context) => _context = context;
 
-        // Сторінка зі списком карток
-        public async Task<IActionResult> Index()
-        {
-            var allCases = await _context.CaseRecords.ToListAsync();
-            return View(allCases);
-        }
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			var data = await _context.CaseRecords
+				.Include(c => c.CountryEntity)
+				.Include(c => c.Source)
+				.ToListAsync();
 
-        // Сторінка з детальною інформацією
-        public async Task<IActionResult> Details(int id)
-        {
-            var singleRecord = await _context.CaseRecords.FirstOrDefaultAsync(record => record.Id == id);
+				var userData = await _context.Users
+			.AsNoTracking()
+			.ToListAsync();
 
-            if (singleRecord == null)
-            {
-                return NotFound();
-            }
-            return View(singleRecord);
-        }
-    }
+			var model = new CentralTableViewModel
+			{
+				CaseRecords = data,
+				Users = userData
+			};
+
+			return View(model);
+		}
+
+	}
 }

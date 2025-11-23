@@ -1,0 +1,50 @@
+﻿body {
+    font-family: Consolas, "Courier New", monospace;
+    background: #1e1e1e;
+    color: #d4d4d4;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #dcdcaa;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #3c3c3c;
+    font-size: 14px;
+    table-layout: fixed;
+}
+
+thead {
+    background: #333333;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+th, td {
+    border: 1px solid #3c3c3c;
+    padding: 6px 10px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+tr:nth-child(even) {
+    background: #252526;
+}
+
+tr:nth-child(odd) {
+    background: #1e1e1e;
+}
+
+tr:hover {
+    background: #094771;
+}
+
+th {
+    color: #569cd6;
+}

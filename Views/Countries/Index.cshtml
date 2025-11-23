@@ -84,13 +84,21 @@
 
     <h1 class="page-title">History</h1>
 
+    <form asp-action="Index" method="get" style="width: 80%; display: flex; justify-content: center; margin: auto; margin-top: 30px;">
+        <label for="filterString">Search by country:</label>
+        <input type="text" id="filterString" name="filterString" value="@ViewBag.Filter" placeholder="e.g., Ukraine" />
+        <button type="submit">Search</button>
+    </form>
+
     <div class="stats-grid-countries">
+
         @foreach (var c in Model)
         {
             <div class="stat-card country-card">
                 <h3>@c.Name</h3>
-                <a asp-controller="Countries" asp-action="Details" asp-route-id="@c.Id" class="details-link">View Details</a>
+                <a asp-controller="Countries" asp-action="Details" asp-route-SelectedCountry="@c.Name" class="details-link">View Details</a>
             </div>
         }
     </div>
+
 </body>

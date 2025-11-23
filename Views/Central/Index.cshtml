@@ -1,86 +1,158 @@
-﻿@model IEnumerable<disease_outbreaks_detector.Models.CaseRecord>
-@{
-    ViewData["Title"] = "Список випадків";
-}
+﻿@model CentralTableViewModel
 
 <head>
-    <title>@ViewData["Title"]</title>
+    <title>Choose page</title>
     <link rel="stylesheet" href="~/Styles/HomePage.css" />
     <link rel="stylesheet" href="~/Styles/Style.css" />
+    <link rel="stylesheet" href="~/Styles/CentralTableStyle.css" />
     <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="nav-upper-panel">
-        <div class="nav-upper-panel-ov">
-            <div class="nav-upper-panel-bar">
-                <p>Made in Ukraine</p>
-                <p>Stay informed with real-time COVID-19 monitoring worldwide.</p>
-                <a><b>Public Health Support</b></a>
-            </div>
+<div class="nav-upper-panel">
+    <div class="nav-upper-panel-ov">
+        <div class="nav-upper-panel-bar">
+            <p style="color:black" >Made in Ukraine</p>
+            <p style="color:black" >Stay informed with real-time COVID-19 monitoring worldwide.</p>
+            <a><b>Public Health Support</b></a>
         </div>
     </div>
+</div>
 
-    <header>
-        <div class="header-bar">
-            <div class="logo-section">
-                <a class="logo" href="/HomePage/Index">
-                    <img src="~/public/logo.png">
+<header>
+    <div class="header-bar">
+        <div class="logo-section">
+            <a class="logo" href="/HomePage/Index">
+                <img src="~/public/logo.png">
+            </a>
+            <div class="nav-buttons">
+                <div class="shop-btn" onclick="window.location.href='/Cases/ChoosePage'">
+                    <p style="color:black"> View All </p>
+                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-circle-btn">
+                        <circle cx="12.5" cy="12.5" r="12.5" class="svg-circle"></circle>
+                        <path d="M20.7071 13.7071C21.0976 13.3166 21.0976 12.6834 20.7071 12.2929L14.3431 5.92893C13.9526
+                            5.53841 13.3195 5.53841 12.9289 5.92893C12.5384 6.31946 12.5384 6.95262 12.9289 7.34315L18.5858
+                            13L12.9289 18.6569C12.5384 19.0474 12.5384 19.6805 12.9289 20.0711C13.3195 20.4616 13.9526 20.4616
+                            14.3431 20.0711L20.7071 13.7071ZM5 14H20V12H5V14Z" class="svg-arrow"></path>
+                    </svg>
+
+                </div>
+                <a> FAQs </a>
+                <a> Submit a Report </a>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <a> + 1 (888) 232-1901 </a>
+            <div class="account-btn">
+                <a style="height: 32px">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.0648 27.5603C12.1984 27.5603 8.78048 25.5807
+                6.78542 22.6114C6.83181 19.5182 12.9717 17.817 16.0648 17.817C19.1579 17.817
+                25.2977 19.5182 25.3441 22.6114C23.3491 25.5807 19.9312 27.5603 16.0648 27.5603ZM16.0648
+                5.59921C17.2953 5.59921 18.4754 6.08803 19.3455 6.95814C20.2156 7.82825 20.7044 9.00837
+                20.7044 10.2389C20.7044 11.4694 20.2156 12.6495 19.3455 13.5196C18.4754 14.3897 17.2953
+                14.8786 16.0648 14.8786C14.8342 14.8786 13.6541 14.3897 12.784 13.5196C11.9139 12.6495
+                11.4251 11.4694 11.4251 10.2389C11.4251 9.00837 11.9139 7.82825 12.784 6.95814C13.6541 6.08803
+                14.8342 5.59921 16.0648 5.59921ZM16.0648 0.959534C14.0338 0.959534 12.0227 1.35956 10.1463
+                2.13678C8.26997 2.914 6.56506 4.05319 5.12895 5.4893C2.22859 8.38966 0.599182 12.3234 0.599182
+                16.4251C0.599182 20.5268 2.22859 24.4606 5.12895 27.3609C6.56506 28.7971 8.26997 29.9362 10.1463
+                30.7135C12.0227 31.4907 14.0338 31.8907 16.0648 31.8907C20.1665 31.8907 24.1002 30.2613 27.0006
+                27.3609C29.9009 24.4606 31.5304 20.5268 31.5304 16.4251C31.5304 7.87265 24.5708 0.959534 16.0648
+                0.959534Z" fill="#C0C0A8"></path>
+                    </svg>
                 </a>
-                <div class="nav-buttons">
-                    <div class="shop-btn" onclick="window.location.href='/Cases/ChoosePage'">
-                        <p> View All </p>
-                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-circle-btn">
-                            <circle cx="12.5" cy="12.5" r="12.5" class="svg-circle"></circle>
-                            <path d="M20.7071 13.7071C21.0976 13.3166 21.0976 12.6834 20.7071 12.2929L14.3431 5.92893C13.9526 5.53841 13.3195 5.53841 12.9289 5.92893C12.5384 6.31946 12.5384 6.95262 12.9289 7.34315L18.5858 13L12.9289 18.6569C12.5384 19.0474 12.5384 19.6805 12.9289 20.0711C13.3195 20.4616 13.9526 20.4616 14.3431 20.0711L20.7071 13.7071ZM5 14H20V12H5V14Z" class="svg-arrow"></path>
-                        </svg>
-                    </div>
-                    <a asp-controller="FAQs" asp-action="Index">FAQs</a>
-                    <a asp-controller="SubmitReport" asp-action="Index">Submit a Report</a>
-                    <a asp-controller="Central" asp-action="Index">Case Records</a>
-                </div>
-            </div>
 
-            <div class="contact-section">
-                <a> + 1 (888) 232-1901 </a>
-                <div class="account-btn">
-                    <a style="height: 32px">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16.0648 27.5603C12.1984 27.5603 8.78048 25.5807 6.78542 22.6114C6.83181 19.5182 12.9717 17.817 16.0648 17.817C19.1579 17.817 25.2977 19.5182 25.3441 22.6114C23.3491 25.5807 19.9312 27.5603 16.0648 27.5603ZM16.0648 5.59921C17.2953 5.59921 18.4754 6.08803 19.3455 6.95814C20.2156 7.82825 20.7044 9.00837 20.7044 10.2389C20.7044 11.4694 20.2156 12.6495 19.3455 13.5196C18.4754 14.3897 17.2953 14.8786 16.0648 14.8786C14.8342 14.8786 13.6541 14.3897 12.784 13.5196C11.9139 12.6495 11.4251 11.4694 11.4251 10.2389C11.4251 9.00837 11.9139 7.82825 12.784 6.95814C13.6541 6.08803 14.8342 5.59921 16.0648 5.59921ZM16.0648 0.959534C14.0338 0.959534 12.0227 1.35956 10.1463 2.13678C8.26997 2.914 6.56506 4.05319 5.12895 5.4893C2.22859 8.38966 0.599182 12.3234 0.599182 16.4251C0.599182 20.5268 2.22859 24.4606 5.12895 27.3609C6.56506 28.7971 8.26997 29.9362 10.1463 30.7135C12.0227 31.4907 14.0338 31.8907 16.0648 31.8907C20.1665 31.8907 24.1002 30.2613 27.0006 27.3609C29.9009 24.4606 31.5304 20.5268 31.5304 16.4251C31.5304 7.87265 24.5708 0.959534 16.0648 0.959534Z" fill="#C0C0A8"></path>
-                        </svg>
-                    </a>
-                    @if (User.Identity?.IsAuthenticated ?? false)
-                    {
-                        <span class="sing-text">Hello, @User.Identity.Name!</span>
-                        <button type="button" class="sing-text logout-btn" onclick="window.location.href='@Url.Action("Logout", "Account")'">Logout</button>
-                    }
-                    else
-                    {
-                        <button type="button" class="sing-text signin-btn" onclick="window.location.href='/Account/Login'">Sign in</button>
-                    }
-                </div>
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <span class="sing-text">Hello, @User.Identity.Name!</span>
+                    <button type="button" class="sing-text logout-btn" onclick="window.location.href='@Url.Action("Logout", "Account")'">Logout</button>
+                }
+                else
+                {
+
+                    <button type="button" class="sing-text signin-btn" onclick="window.location.href='/Account/Login'">Sign in</button>
+                }
             </div>
         </div>
-        <span class="bottom-header-line"> </span>
-    </header>
-    <style>
-        .case-card-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; padding: 20px; }
-        .case-card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px 24px; text-align: center; min-width: 200px; border: 1px solid #eee; }
-        .case-card h3 { font-size: 1.25rem; margin-bottom: 15px; font-weight: 600; color: #333; }
-        .case-card a { text-decoration: none; color: #007bff; font-weight: 500; font-size: 1.1rem; }
-        .case-card a:hover { text-decoration: underline; }
-        .page-title { text-align: center; margin-top: 40px; margin-bottom: 20px; }
-    </style>
-
-    <h2 class="page-title">Список випадків (Центральна таблиця)</h2>
-
-    <div class="case-card-container">
-        @foreach (var item in Model)
-        {
-            <div class="case-card">
-                <h3>@Html.DisplayFor(modelItem => item.Country)</h3>
-                <a asp-action="Details" asp-route-id="@item.Id">Деталі</a>
-            </div>
-        }
     </div>
+    <span class="bottom-header-line"> </span>
+</header>
 
-</body>
+<h2 style="color: #569cd6; text-align:center; margin-top:20px">Case Records Table</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Country</th>
+            <th>Cases</th>
+            <th>TodayCases</th>
+            <th>Deaths</th>
+            <th>TodayDeaths</th>
+            <th>Recovered</th>
+            <th>TodayRecovered</th>
+            <th>Population</th>
+            <th>Active</th>
+            <th>Critical</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>UpdatedAt</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CaseRecords)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Country</td>
+                <td>@item.Cases</td>
+                <td>@item.TodayCases</td>
+                <td>@item.Deaths</td>
+                <td>@item.TodayDeaths</td>
+                <td>@item.Recovered</td>
+                <td>@item.TodayRecovered</td>
+                <td>@item.population</td>
+                <td>@item.Active</td>
+                <td>@item.Critical</td>
+                <td>@item.Latitude</td>
+                <td>@item.Longitude</td>
+                <td>@item.UpdatedAt.ToString("yyyy-MM-dd")</td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2 style="color: #569cd6; text-align:center; margin-top:20px">Users Table</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>FullName</th>
+            <th>Phone</th>
+            <th>UserName</th>
+            <th>NormalizedUserName</th>
+            <th>Email</th>
+            <th>NormalizedEmail</th>
+            <th>TwoFactorEnabled</th>
+            <th>SecurityStamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Users)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.FullName</td>
+                <td>@item.Phone</td>
+                <td>@item.UserName</td>
+                <td>@item.NormalizedUserName</td>
+                <td>@item.Email</td>
+                <td>@item.NormalizedEmail</td>
+                <td>@item.TwoFactorEnabled</td>
+                <td>@item.SecurityStamp</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,21 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:g="clr-namespace:Avalonia.Labs.Gif;assembly=Avalonia.Labs.Gif"
+        x:Class="Client.LoadingView"
+        Width="100" Height="100"
+        SystemDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="AcrylicBlur,Transparent"
+        CanResize="False"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterScreen">
+
+	<Grid>
+		<g:GifImage Source="avares://Client/assets/loading.gif"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Stretch="Uniform"
+                    Width="100"
+                    Height="100"/>
+	</Grid>
+</Window>

@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using System.Threading.Tasks;
 
 namespace Client
 {
@@ -9,22 +10,31 @@ namespace Client
 			InitializeComponent();
 		}
 
-		private void HistoryButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+		private async Task ShowLoadingScreen()
 		{
-			var hw = new CaseRecordView();
-			hw.Show();
+			var lv = new LoadingView();
+			lv.Show();
+
+			await Task.Delay(500);
+
+			lv.Close();
 		}
 
-		private void AboutButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+		private async void HistoryButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			var abw = new About();
-			abw.Show();
+			await ShowLoadingScreen();
+			new CaseRecordView().Show();
 		}
 
-		private void TableButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+		private async void AboutButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			var tw = new CentralTable();
-			tw.Show();
+			new About().Show();
+		}
+
+		private async void TableButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			await ShowLoadingScreen();
+			new CentralTable().Show();
 		}
 	}
 }

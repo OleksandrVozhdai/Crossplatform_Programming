@@ -22,7 +22,10 @@ public partial class CaseRecordView : Window
 		var lv = new LoadingView();
 		lv.Show();
 
-		await Task.Delay(500);
+		Random rnd = new Random();
+		int delay = rnd.Next(100, 601);
+
+		await Task.Delay(delay);
 
 		lv.Close();
 	}

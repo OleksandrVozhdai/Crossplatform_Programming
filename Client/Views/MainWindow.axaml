@@ -6,7 +6,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Client.MainWindow"
         xmlns:vm="clr-namespace:Client.ViewsModel"
-        Title="Client">
+        Title="Client"
+        Background="#F5F5F5">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -24,6 +25,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+       
+        <Image Grid.Row="1" Grid.Column="0" Source="avares://Client/assets/cor1.png"
+               Width="800" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+      
         <StackPanel Grid.Row="1" Grid.Column="1" Spacing="15" HorizontalAlignment="Center" VerticalAlignment="Center">
             
             <Button Width="250" Height="50" CornerRadius="5" Click="HistoryButton_Click">
@@ -48,5 +54,9 @@
             </Button>
             
         </StackPanel>
+
+       
+        <Image Grid.Row="1" Grid.Column="2" Source="avares://Client/assets/cor2.png"
+               Width="800" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center"/>
     </Grid>
 </Window>

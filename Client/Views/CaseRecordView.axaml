@@ -1,0 +1,89 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Models"
+        xmlns:vm="clr-namespace:Client.ViewsModel"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Client.CaseRecordView"
+        Title="CaseRecordView"
+        x:DataType="vm:CaseRecordViewModel" 
+        Background="#F5F5F5">
+    
+   
+    <StackPanel Margin="20">
+        
+        <TextBlock Text="History" 
+                   FontSize="36" 
+                   Foreground="#000"
+                   FontWeight="SemiBold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0 10 0 30"/>
+
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Center"
+                    Margin="0 0 0 40">
+            
+            <TextBlock Text="Search by country: " 
+                       VerticalAlignment="Center" 
+                       Margin="0 0 10 0" 
+                       />
+            
+            <TextBox Text="{Binding FilterString}" 
+                     Watermark="e.g., Ukraine"
+                     Width="400" 
+                     Height="35"
+                     VerticalContentAlignment="Center"
+                     CornerRadius="5"
+                     BorderThickness="1"
+                     
+                     Margin="0 0 10 0"/>
+            
+            <Button Content="Search" 
+                    Command="{Binding SearchCommand}"
+                    Background="#007ACC"
+                    Foreground="White"
+                    CornerRadius="5" />
+        </StackPanel>
+
+        <ItemsControl ItemsSource="{Binding Countries}"
+                      HorizontalAlignment="Center">
+            
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" 
+                               HorizontalAlignment="Center"
+                               ItemWidth="220"
+                               ItemHeight="150"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="local:CaseRecord">
+                    <Border Background="White" CornerRadius="10"
+                            Margin="10" Padding="10"
+                            Width="200" Height="130"
+                            
+                            BoxShadow="0 2 5 #AAAAAA"> <StackPanel>
+                            <TextBlock Text="{Binding Country}" 
+                                       FontSize="24"
+                                       Foreground="#000"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       Margin="0 15 0 10"/>
+                            
+                            <Button Content="View Details"
+                                    Foreground="#007ACC"
+                                    Click="Button_Click_Details"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    HorizontalAlignment="Center"
+                                    Margin="0 10 0 0"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </StackPanel>
+</Window>

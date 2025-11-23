@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="350"
+        x:Class="Client.About"
+        Title="About"
+        Background="#FFFAFAFA">
+
+    <Border Margin="10" Padding="15" Background="#FFFFFFFF" BorderBrush="black" BorderThickness="2" CornerRadius="10" >
+        <ScrollViewer>
+            <StackPanel>
+                <TextBlock FontSize="20" FontWeight="Bold" Foreground="black" Margin="0 0 0 10" Text="About this Launcher"/>
+                <TextBlock TextWrapping="Wrap" FontSize="14">
+                    Welcome to this project! 
+                    This launcher was specially created for the web application 
+                    <Run FontWeight="Bold">Disease Outbreaks Detector</Run> 
+                    and developed using Avalonia as part of Laboratory Work #7. 
+
+                    The purpose of this project is to provide the user with a convenient and intuitive interface 
+                    for launching and configuring the web application, simplifying access to all functions, 
+                    and ensuring basic integration with the local system. 
+
+                    Avalonia was chosen as a modern cross-platform framework, 
+                    allowing the application to run smoothly on Windows, Linux, and macOS without additional setup. 
+
+                    We hope using this launcher will be a smooth and enjoyable experience!
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</Window>

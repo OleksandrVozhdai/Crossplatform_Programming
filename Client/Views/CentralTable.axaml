@@ -1,0 +1,66 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:local="clr-namespace:Client.Models"
+        xmlns:vm="clr-namespace:Client.ViewsModel"
+        x:Class="Client.CentralTable"
+        x:DataType="vm:CaseRecordViewModel" 
+        Title="CentralTable" Background="#201e1c" Foreground="#569cd6" HorizontalContentAlignment="Center">
+
+    <StackPanel Margin="20">
+        
+        <TextBlock Text="Central Table" 
+                   FontSize="36" 
+                   
+                   FontWeight="SemiBold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0 10 0 30"/>
+
+        <Grid ColumnDefinitions="150, 100, 100, 100, 100, 100, 100, *"
+              Margin="0 0 0 10">
+            <TextBlock Text="Country" Grid.Column="0"  TextAlignment="Center"/>
+            <TextBlock Text="Cases" Grid.Column="1"  TextAlignment="Center"/>
+            <TextBlock Text="TodayCases" Grid.Column="2"  TextAlignment="Center"/>
+            <TextBlock Text="Deaths" Grid.Column="3"  TextAlignment="Center"/>
+            <TextBlock Text="Today" Grid.Column="4"  TextAlignment="Center"/>
+            <TextBlock Text="Recovered" Grid.Column="5"  TextAlignment="Center"/>
+            <TextBlock Text="Today" Grid.Column="6"  TextAlignment="Center"/>
+            <TextBlock Text="Population" Grid.Column="7"  TextAlignment="Center"/>
+        </Grid>
+        
+        <ItemsControl ItemsSource="{Binding Countries}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="local:CaseRecord">
+                    <Grid ColumnDefinitions="150, 100, 100, 100, 100, 100, 100, *"
+                          Margin="0 5">
+                        
+                        <TextBlock Grid.Column="0" Text="{Binding Country}" 
+                                   FontSize="10" FontWeight="Bold" TextAlignment="Center"/>
+                        
+                        <TextBlock Grid.Column="1" Text="{Binding Cases}" 
+                                   FontSize="10"  TextAlignment="Center"/>
+                        
+                        <TextBlock Grid.Column="2" Text="{Binding TodayCases}" 
+                                   FontSize="10"  TextAlignment="Center"/>
+                        
+                        <TextBlock Grid.Column="3" Text="{Binding Deaths}" 
+                                   FontSize="10"  TextAlignment="Center"/>
+                        
+                        <TextBlock Grid.Column="4" Text="{Binding TodayDeaths}" 
+                                   FontSize="10"  TextAlignment="Center"/>
+                        
+                        <TextBlock Grid.Column="5" Text="{Binding Recovered}" 
+                                   FontSize="10"  TextAlignment="Center"/>
+                        
+                        <TextBlock Grid.Column="6" Text="{Binding TodayRecovered}" 
+                                   FontSize="10"  TextAlignment="Center"/>    
+                        <TextBlock Grid.Column="7" Text="{Binding Population}" 
+                                       FontSize="10"  TextAlignment="Center"/>   
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</Window>

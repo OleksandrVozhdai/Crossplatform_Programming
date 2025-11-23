@@ -1,0 +1,96 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        xmlns:local="clr-namespace:Client.Models"
+        xmlns:vm="clr-namespace:Client.ViewsModel"
+        x:Class="Client.Details"
+        Title="COVID-19 Data"
+        x:DataType="vm:DetailsViewModel">
+
+    <Grid RowDefinitions="Auto, Auto, *" Margin="20">
+
+        <TextBlock Grid.Row="0"
+                   Text="{Binding SelectedCountryResult.Country, StringFormat='COVID-19 Data for {0}'}"
+                   FontSize="30"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,10,0,20"/>
+
+        
+
+        <Grid Grid.Row="2"
+              x:DataType="local:CaseRecord" 
+              ColumnDefinitions="*, *, *, *"
+              RowDefinitions="Auto, Auto"
+              RowSpacing="15"
+              ColumnSpacing="15"
+              HorizontalAlignment="Center"> <Grid.DataContext>
+                <Binding Path="SelectedCountryResult"/>
+            </Grid.DataContext>
+
+            <Grid.Styles>
+                <Style Selector="TextBlock.CardLabel">
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Foreground" Value="#666666"/>
+                    <Setter Property="Margin" Value="0,0,0,5"/>
+                </Style>
+                <Style Selector="TextBlock.CardValue">
+                    <Setter Property="FontSize" Value="24"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Foreground" Value="#007bff"/>
+                </Style>
+            </Grid.Styles>
+
+            <Border Grid.Row="0" Grid.Column="0" Background="White" CornerRadius="8" Padding="15" BoxShadow="0 2 4 #0000001A"> <StackPanel>
+                    <TextBlock Text="Total Cases" Classes="CardLabel"/>
+                    <TextBlock Text="{Binding Cases, StringFormat='{}{0:N0}'}" Classes="CardValue"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="0" Grid.Column="1" Background="White" CornerRadius="8" Padding="15" BoxShadow="0 2 4 #0000001A"> <StackPanel>
+                    <TextBlock Text="Today Cases" Classes="CardLabel"/>
+                    <TextBlock Text="{Binding TodayCases, TargetNullValue='N/A', StringFormat='{}{0:N0}'}" Classes="CardValue"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="0" Grid.Column="2" Background="White" CornerRadius="8" Padding="15" BoxShadow="0 2 4 #0000001A"> <StackPanel>
+                    <TextBlock Text="Deaths" Classes="CardLabel"/>
+                    <TextBlock Text="{Binding Deaths, StringFormat='{}{0:N0}'}" Classes="CardValue"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="0" Grid.Column="3" Background="White" CornerRadius="8" Padding="15" BoxShadow="0 2 4 #0000001A"> <StackPanel>
+                    <TextBlock Text="Today Deaths" Classes="CardLabel"/>
+                    <TextBlock Text="{Binding TodayDeaths, TargetNullValue='N/A', StringFormat='{}{0:N0}'}" Classes="CardValue"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="0" Background="White" CornerRadius="8" Padding="15" BoxShadow="0 2 4 #0000001A"> <StackPanel>
+                    <TextBlock Text="Recovered" Classes="CardLabel"/>
+                    <TextBlock Text="{Binding Recovered, StringFormat='{}{0:N0}'}" Classes="CardValue"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="1" Background="White" CornerRadius="8" Padding="15" BoxShadow="0 2 4 #0000001A"> <StackPanel>
+                    <TextBlock Text="Today Recovered" Classes="CardLabel"/>
+                    <TextBlock Text="{Binding TodayRecovered, TargetNullValue='N/A', StringFormat='{}{0:N0}'}" Classes="CardValue"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="2" Background="White" CornerRadius="8" Padding="15" BoxShadow="0 2 4 #0000001A"> <StackPanel>
+                    <TextBlock Text="Population" Classes="CardLabel"/>
+                    <TextBlock Text="{Binding Population, StringFormat='{}{0:N0}'}" Classes="CardValue"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" Grid.Column="3" Background="White" CornerRadius="8" Padding="15" BoxShadow="0 2 4 #0000001A"> <StackPanel>
+                    <TextBlock Text="Updated" Classes="CardLabel"/>
+                    <TextBlock Text="{Binding UpdatedAt, StringFormat='{}{0:dd.MM.yyyy}'}" Classes="CardValue"/>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+    </Grid>
+</Window>

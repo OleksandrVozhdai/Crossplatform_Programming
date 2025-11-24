@@ -1,133 +1,114 @@
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.EntityFramework.DbContexts;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using disease_outbreaks_detector.Data;
 using disease_outbreaks_detector.Models;
 using disease_outbreaks_detector.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.Versioning; // Adding using for ApiVersionRouteConstraint
+using Microsoft.AspNetCore.Routing; // Adding using for RouteOptions
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
-var provider = builder.Configuration.GetValue<string>("Provider");
+// === DATABASE ===
+var provider = config["Database:Provider"] ?? "Sqlite";
+var connectionString = config.GetConnectionString(provider) ?? "Data Source=diseaseOutbreaksDB.db";
 
+// === APPLICATION DB CONTEXT ===
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     switch (provider)
     {
-        case "SqlServer":
-
-            var sqlServerConStr = builder.Configuration.GetConnectionString("SqlServer");
-            options.UseSqlServer(sqlServerConStr);
-            Console.WriteLine("Using MS-SQL Server");
-            break;
-
-        case "Postgres":
-
-            var postgresConStr = builder.Configuration.GetConnectionString("Postgres");
-            options.UseNpgsql(postgresConStr);
-            Console.WriteLine("Using PostgreSQL");
-            break;
-
-        case "InMemory":
-
-            options.UseInMemoryDatabase("InMemoryDb");
-            Console.WriteLine("Using In-Memory Database");
-            break;
-
+        case "SqlServer": options.UseSqlServer(connectionString); break;
+        case "Postgres": options.UseNpgsql(connectionString); break;
         case "Sqlite":
-        default:
-
-            var sqliteConStr = builder.Configuration.GetConnectionString("Sqlite")
-                               ?? "Data Source=diseaseOutbreaksDB.db";
-            options.UseSqlite(sqliteConStr);
-            Console.WriteLine("Using SQLite");
-            break;
+        default: options.UseSqlite(connectionString); break;
     }
 });
 
-// ===============================================================
-
-
-builder.Services.AddControllersWithViews();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-
-	var provider = builder.Services.BuildServiceProvider()
-					 .GetRequiredService<IApiVersionDescriptionProvider>();
-
-	
-	foreach (var description in provider.ApiVersionDescriptions)
-	{
-		options.SwaggerDoc(description.GroupName, new OpenApiInfo
-		{
-			Title = $"Disease Outbreaks Detector API {description.ApiVersion}",
-			Version = description.ApiVersion.ToString(),
-		});
-	}
-});
-
-
-builder.Services.AddHttpClient("default");
-
-builder.Services.AddScoped<ExternalApi>();
-
-builder.Services.AddScoped<CaseRecordService>();
-
-
+// === IDENTITY + RAZOR PAGES ===
 builder.Services.AddIdentity<AppDbContextUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 8;
-    options.Password.RequiredUniqueChars = 1;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddRazorPages(); // ← Required!
+
+// === DUENDE IDENTITY SERVER ===
+builder.Services.AddIdentityServer()
+    .AddDeveloperSigningCredential() // dev only
+    .AddAspNetIdentity<AppDbContextUser>()
+    .AddConfigurationStore(options =>
+    {
+        options.ConfigureDbContext = b =>
+            b.UseSqlite(connectionString, sql =>
+                sql.MigrationsAssembly(typeof(Program).Assembly.FullName));
+    })
+    .AddOperationalStore(options =>
+    {
+        options.ConfigureDbContext = b =>
+            b.UseSqlite(connectionString, sql =>
+                sql.MigrationsAssembly(typeof(Program).Assembly.FullName));
+        options.EnableTokenCleanup = true;
+    });
+
+// === GOOGLE ===
+builder.Services.AddAuthentication()
+    .AddGoogle("Google", options =>
+    {
+        options.ClientId = config["Authentication:Google:ClientId"]!;
+        options.ClientSecret = config["Authentication:Google:ClientSecret"]!;
+    });
+
+// === API + SWAGGER + VERSIONING (UPDATED BLOCK) ===
+builder.Services.AddControllersWithViews();
+
 builder.Services.AddApiVersioning(options =>
 {
-	options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(2, 0);
-	options.AssumeDefaultVersionWhenUnspecified = true;
-	options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    options.ReportApiVersions = true;
 });
-
 
 builder.Services.AddVersionedApiExplorer(options =>
 {
-	options.GroupNameFormat = "'v'VVV";
-	options.SubstituteApiVersionInUrl = true;
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
 });
 
+// REMOVED: The following block was removed because AddApiVersioning already registers 
+// the "apiVersion" constraint, causing a duplicate key exception.
+// builder.Services.Configure<RouteOptions>(options =>
+// {
+//     options.ConstraintMap["apiVersion"] = typeof(ApiVersionRouteConstraint);
+// });
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-// === GOOGLE OAUTH2 ===
-builder.Services.AddAuthentication()
-    .AddGoogle(options =>
-    {
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-    });
+// Keeping the rest of the services from the original block
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<ExternalApi>();
 
 var app = builder.Build();
 
-var providerDesc = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+if (app.Environment.IsDevelopment())
 {
-	foreach (var description in providerDesc.ApiVersionDescriptions)
-	{
-		options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
-								$"API {description.GroupName.ToUpperInvariant()}");
-	}
-});
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-
+app.UseIdentityServer();         // ← BEFORE UseAuthentication!
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -135,26 +116,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=HomePage}/{action=Index}/{id?}");
 
-using var scope = app.Services.CreateScope();
-var services = scope.ServiceProvider;
-
-try
-{
-    var dbContext = services.GetRequiredService<ApplicationDbContext>();
-
-    if (provider != "InMemory")
-    {
-        await dbContext.Database.MigrateAsync();
-        Console.WriteLine("Database migration applied.");
-    }
-
-    var externalApi = services.GetRequiredService<ExternalApi>();
-    await externalApi.FetchAndStoreAsync("usa");
-    Console.WriteLine("Seed USA � OK");
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"An error occurred during DB migration or seeding: {ex.Message}");
-}
+app.MapRazorPages(); // ← Login/Registration pages
 
 app.Run();

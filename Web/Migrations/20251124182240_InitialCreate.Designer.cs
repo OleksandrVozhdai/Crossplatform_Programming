@@ -11,14 +11,14 @@ using disease_outbreaks_detector.Data;
 namespace disease_outbreaks_detector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251108213357_Restore")]
-    partial class Restore
+    [Migration("20251124182240_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {

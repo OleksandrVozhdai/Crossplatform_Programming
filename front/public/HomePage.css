@@ -11,7 +11,7 @@ body {
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
-    background-image: url("../assets/worldmap.png");
+    background-image: url("../src/assets/worldmap.png");
 
     background-repeat: no-repeat;
     background-size: cover;

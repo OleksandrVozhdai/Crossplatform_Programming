@@ -100,6 +100,18 @@ builder.Services.AddVersionedApiExplorer(options =>
 	options.SubstituteApiVersionInUrl = true;
 });
 
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowFrontend",
+		policy =>
+		{
+			policy.WithOrigins("http://localhost:3000")
+				  .AllowAnyHeader()
+				  .AllowAnyMethod()
+				  .AllowCredentials();
+		});
+});
+
 
 
 // === GOOGLE OAUTH2 ===
@@ -127,6 +139,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

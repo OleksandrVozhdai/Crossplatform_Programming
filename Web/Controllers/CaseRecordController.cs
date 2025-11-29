@@ -135,6 +135,26 @@ namespace disease_outbreaks_detector.Controllers
 			return NoContent();
 		}
 
+		[HttpGet("login")]
+		[MapToApiVersion("1.0")]
+		[MapToApiVersion("2.0")]
+		public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
+		{
+			if (string.IsNullOrWhiteSpace(email))
+				return BadRequest("Email is required.");
+
+			var user = await _context.Users
+				.AsNoTracking()
+				.FirstOrDefaultAsync(u => u.Email == email);
+
+			if (user == null)
+				return NotFound("User not found.");
+
+			return Ok(user);
+		}
+
+
+
 		private bool CaseRecordExists(int id) =>
 			_context.CaseRecords.Any(e => e.Id == id);
 	}

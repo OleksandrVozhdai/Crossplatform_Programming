@@ -1,23 +1,78 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
+# --- Node ---
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+pnpm-lock.yaml
+
+# --- Build output ---
+dist/
+build/
+out/
+.temp/
+.temp/
+
+# --- Environment files ---
+.env
+.env.development
+.env.production
+.env.local
+.env.test
+.env.*.local
+
+# --- Log files ---
+logs/
+*.log
+*.log.*
+debug.log
+
+# --- Editor folders ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- Local certificates ---
+*.pem
+*.key
+*.crt
+
+# --- Cache ---
+.cache/
+.eslintcache
+stylelintcache
+.parcel-cache/
+vite.config.js.timestamp*
+vite.config.ts.timestamp*
+
+# --- Coverage reports ---
+coverage/
+*.lcov
+
+# --- Testing ---
+jest-cache/
+jest-output/
+*.tsbuildinfo
+
+# --- Optional: if using React Router with static build ---
+/.history/
+
+# --- Local Dev files ---
+*.local.json
+
+# --- Temporary files ---
+*.tmp
+*.temp
+
+# --- Production server artifacts (if any) ---
+/Server/bin/
+/Server/obj/

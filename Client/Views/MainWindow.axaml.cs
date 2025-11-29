@@ -30,7 +30,7 @@ namespace Client
 			new CaseRecordView().Show();
 		}
 
-		private async void AboutButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+		private void AboutButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			new About().Show();
 		}

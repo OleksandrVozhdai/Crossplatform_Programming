@@ -20,6 +20,7 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="ReactiveUI" Version="22.2.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
 	 <AvaloniaResource Include="assets\loading.gif" />
 	  <AvaloniaResource Include="assets\cor1.png" />
 	  <AvaloniaResource Include="assets\cor2.png" />
